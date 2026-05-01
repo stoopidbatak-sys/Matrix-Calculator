@@ -60,7 +60,7 @@ void DisplayAugmented (fraction* Augmatrix, int rows, int cols) {
 
 void Equations(fraction* Augmatrix, int rows, int cols) {
     for(int i=0; i<rows; i++) {
-        cout<<"\n"<<Augmatrix[i*cols]<<::variables[0];
+        cout<<Augmatrix[i*cols]<<::variables[0];
         for(int j=1; j<cols-1; j++) {
             if(Augmatrix[i*cols+j] < 0)
                 cout<<" - "<<-Augmatrix[i*cols+j]<<::variables[j];

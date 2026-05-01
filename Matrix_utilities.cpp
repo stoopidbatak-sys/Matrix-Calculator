@@ -450,7 +450,7 @@ void SwitchBody(const Operations &op) {
             }
 
             double* AugMatrix = AugmentedMatrix(Coffmatrix, Constmatrix, size, size);
-            cout<<"\n====Equations====";
+            cout<<"\n====Equations===="<<endl;
             Equations(AugMatrix, size, size+1);
 
             cout<<"\n====Solution===="<<endl;
@@ -483,7 +483,7 @@ void SwitchBody(const Operations &op) {
             }
 
             double* AugMatrix = AugmentedMatrix(Coffmatrix, Constmatrix, size, size);
-            cout<<"\n====Equations====";
+            cout<<"\n====Equations===="<<endl;
             Equations(AugMatrix, size, size+1);
 
             cout<<"\n====Solution===="<<endl;
@@ -518,7 +518,7 @@ void SwitchBody(const Operations &op) {
             }
 
             fraction* AugMatrix = AugmentedMatrix(Coffmatrix, Constmatrix, rows, cols);
-            cout<<"\n====Equations====";
+            cout<<"\n====Equations===="<<endl;
             Equations(AugMatrix, rows, cols+1);
 
             cout<<"\nAugmented Matrix :"<<endl;
