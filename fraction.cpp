@@ -483,8 +483,7 @@ fraction fraction :: toFraction(const float &value) const {
 }
 
 double toDouble (const fraction &obj) {
-    double temp = obj.num/obj.den;
-    return temp;
+    return static_cast<double>(obj.num) / obj.den;
 }
 
 std::istream& operator >> (std::istream &in, fraction &obj) {
