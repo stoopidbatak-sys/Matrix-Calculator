@@ -149,7 +149,6 @@ namespace Fraction {
 
     fraction* reducedEchelon (fraction* matrix, int rows, int cols, int &rowswaps) {
         fraction* temp = rowEchelon(matrix, rows, cols, rowswaps);
-        DisplayMatrix(temp, rows, cols);
 
         int column_pivot_shift;
         for(int i=rows-1; i>=0; i--) {

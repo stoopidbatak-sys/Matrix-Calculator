@@ -16,14 +16,14 @@ char variables[20] = {
 };
 
 void MainMenu() {
-    cout<<"=======Welcome To Matrix Calculator=======\n\n"<<endl;
+    cout<<"\n=======Welcome To Matrix Calculator=======\n"<<endl;
 
     cout<<"Perform any Matrix Operation you want But Before that!"<<endl;
     cout<<"A few things to Remember : "<<endl;
-    cout<<"      • The Calculator is still in Beta Version and is accurate upto 10 x 10 matrices"<<endl;
-    cout<<"      • The Input Mechanism works on fractions"<<endl;
-    cout<<"      • Enter Simplified Coefficients (integers) for Linear Equations"<<endl;
-    cout<<"      • If you have any suggestions or feedback, Dont feel free to Contact Us"<<endl<<endl;
+    cout<<"      1) The Calculator is still in Beta Version and is accurate upto 10 x 10 matrices"<<endl;
+    cout<<"      2) The Input Mechanism works on fractions"<<endl;
+    cout<<"      3) Enter Simplified Coefficients (integers) for Linear Equations"<<endl;
+    cout<<"      4) If you have any suggestions or feedback, Dont feel free to Contact Us"<<endl<<endl;
 
     Features();
 }
@@ -32,17 +32,18 @@ void Features() {
     cout<<"\nSelect Your Operation"<<endl;
     cout<<"1 --> Transpose"<<endl;
     cout<<"2 --> Addition"<<endl;
-    cout<<"3 --> Multiplication"<<endl;
-    cout<<"4 --> Matrix Power"<<endl;
-    cout<<"5 --> Determinant"<<endl;
-    cout<<"6 --> Inverse"<<endl;
-    cout<<"7 --> Row Echelon Form"<<endl;
-    cout<<"8 --> Reduced row Echelon Form"<<endl;
-    cout<<"9 --> Rank of Matrix"<<endl;
-    cout<<"10 --> Cramer's Rule"<<endl;
-    cout<<"11 --> Inverse Method"<<endl;
-    cout<<"12 --> Guass-Jordon Elimination"<<endl;
-    cout<<"13 --> Exit"<<endl;
+    cout<<"3 --> Subtraction"<<endl;
+    cout<<"4 --> Multiplication"<<endl;
+    cout<<"5 --> Matrix Power"<<endl;
+    cout<<"6 --> Determinant"<<endl;
+    cout<<"7 --> Inverse"<<endl;
+    cout<<"8 --> Row Echelon Form"<<endl;
+    cout<<"9 --> Reduced row Echelon Form"<<endl;
+    cout<<"10 --> Rank of Matrix"<<endl;
+    cout<<"11 --> Cramer's Rule"<<endl;
+    cout<<"12 --> Inverse Method"<<endl;
+    cout<<"13 --> Guass-Jordon Elimination"<<endl;
+    cout<<"14 --> Exit"<<endl;
 }
 
 void SizeInput (int &rows, int &cols) {
@@ -509,7 +510,7 @@ void SwitchBody(const Operations &op) {
             for(int i=0; i<rows; i++) {
                 cout<<"\nEquation no "<<i+1<<" : "<<endl;
                 for(int j=0; j<cols; j++) {
-                    cout<<"Cofficient of "<<i+1<<" variable : ";
+                    cout<<"Cofficient of "<<j+1<<" variable : ";
                     cin>>Coffmatrix[i*cols + j];
                 }
                 cout<<"Constant : ";
@@ -519,6 +520,9 @@ void SwitchBody(const Operations &op) {
             fraction* AugMatrix = AugmentedMatrix(Coffmatrix, Constmatrix, rows, cols);
             cout<<"\n====Equations====";
             Equations(AugMatrix, rows, cols+1);
+
+            cout<<"\nAugmented Matrix :"<<endl;
+            DisplayAugmented(AugMatrix, rows, cols+1);
 
             cout<<"\n====Solution===="<<endl;
             Fraction :: Guass_Jordon_Elimination(Coffmatrix, Constmatrix, rows, cols);
