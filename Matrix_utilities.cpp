@@ -346,7 +346,7 @@ void SwitchBody(const Operations &op) {
             else {
                 fraction* result = Fraction :: Inverse(matrixinput, size);
                 cout<<"\nResult : "<<endl;
-                DisplayMatrix(matrixinput, size, size);
+                DisplayMatrix(result, size, size);
 
                 delete[] matrixinput;
                 delete[] result;
