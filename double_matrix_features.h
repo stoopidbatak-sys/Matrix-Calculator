@@ -27,7 +27,7 @@ namespace Double {
 
     void InverseMethod (double *Coffmatrix, double *Constmatrix, int size);
 
-    void Guass_Jordon_Elimination (double *Coffmatrix, double* Constmatrix, int equations, int variables);
+    void Guass_Jordan_Elimination (double *Coffmatrix, double* Constmatrix, int equations, int variables);
 
 }
 

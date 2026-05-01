@@ -234,7 +234,7 @@ namespace Fraction {
         delete[] product;
     }
 
-    void Guass_Jordon_Elimination (fraction *Coffmatrix, fraction* Constmatrix, int equations, int variables) {
+    void Guass_Jordan_Elimination (fraction *Coffmatrix, fraction* Constmatrix, int equations, int variables) {
         int rank = Rank(Coffmatrix, equations, variables);
         int rows = equations;
         int cols = variables+1;

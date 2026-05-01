@@ -29,7 +29,7 @@ namespace Fraction {
 
     void InverseMethod (fraction *Coffmatrix, fraction *Constmatrix, int size);
 
-    void Guass_Jordon_Elimination (fraction *Coffmatrix, fraction* Constmatrix, int equations, int variables);
+    void Guass_Jordan_Elimination (fraction *Coffmatrix, fraction* Constmatrix, int equations, int variables);
 
 }
 
