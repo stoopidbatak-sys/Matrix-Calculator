@@ -8,11 +8,18 @@
 #include <iostream>
 using namespace std;
 
+char variables[20] = {
+    'x','y','z','w','v',
+    'u','t','s','r','q',
+    'p','o','n','m','l',
+    'k','j','i','h','g'
+};
+
 void MainMenu() {
     cout<<"=======Welcome To Matrix Calculator=======\n\n"<<endl;
 
     cout<<"Perform any Matrix Operation you want But Before that!"<<endl;
-    cout<<"A few things to Rememeber : "<<endl;
+    cout<<"A few things to Remember : "<<endl;
     cout<<"      • The Calculator is still in Beta Version and is accurate upto 10 x 10 matrices"<<endl;
     cout<<"      • The Input Mechanism works on fractions"<<endl;
     cout<<"      • Enter Simplified Coefficients (integers) for Linear Equations"<<endl;
@@ -86,7 +93,7 @@ int InputChoice() {
     cout<<"\nEnter your choice : ";
     cin>>choice;
 
-    while(choice < 1 || choice > 14) {
+    while(choice < 1 || choice > features) {
         cout<<"Invalid Input!"<<endl;
         cout<<"Input a number from 1-14 : ";    
         cin>>choice;
@@ -98,89 +105,47 @@ int InputChoice() {
 Operations InputEnum(int choice) {
     Operations temp;
     switch(choice) {
-        case 1 : {
-            Operations temp = Operations :: Transpose;
-            return temp;
-            break;
-        }
+        case 1 : 
+            return Operations :: Transpose;
 
-        case 2 : {
-            Operations temp = Operations :: Addition;
-            return temp;
-            break;
-        }
+        case 2 : 
+            return Operations :: Addition;
 
-        case 3 : {
-            Operations temp = Operations :: Subtraction;
-            return temp;
-            break;
-        }
+        case 3 : 
+            return Operations :: Subtraction;
 
-        case 4 : {
-            Operations temp = Operations :: Multiplication;
-            return temp;
-            break;
-        }
+        case 4 : 
+            return Operations :: Multiplication;
 
-        case 5 : {
-            Operations temp = Operations :: Matrix_Power;
-            return temp;
-            break;
-        }
+        case 5 : 
+            return Operations :: Matrix_Power;
 
-        case 6 : {
-            Operations temp = Operations :: Determinant;
-            return temp;
-            break;
-        }
+        case 6 : 
+            return Operations :: Determinant;
 
-        case 7 : {
-            Operations temp = Operations :: Inverse;
-            return temp;
-            break;
-        }
+        case 7 : 
+            return Operations :: Inverse;
 
-        case 8 : {
-            Operations temp = Operations :: Row_Echelon_Form;
-            return temp;
-            break;
-        }
+        case 8 :
+            return Operations :: Row_Echelon_Form;
 
-        case 9 : {
-            Operations temp = Operations :: Reduced_row_Echelon_Form;
-            return temp;
-            break;
-        }
+        case 9 : 
+            return Operations :: Reduced_row_Echelon_Form;
 
-        case 10 : {
-            Operations temp = Operations :: Rank;
-            return temp;
-            break;
-        }
+        case 10 : 
+            return Operations :: Rank;
 
-        case 11 : {
-            Operations temp = Operations :: Cramers_Rule;
-            return temp;
-            break;
-        }
+        case 11 : 
+            return Operations :: Cramers_Rule;
 
-        case 12 : {
-            Operations temp = Operations :: Inverse_Method;
-            return temp;
-            break;
-        }
+        case 12 : 
+            return Operations :: Inverse_Method;
 
-        case 13 : {
-            Operations temp = Operations :: Guass_Jordon_Elimination;
-            return temp;
-            break;
-        }
+        case 13 : 
+            return Operations :: Guass_Jordon_Elimination;
 
-        case 14 : {
-            Operations temp = Operations :: Exit;
-            return temp;
-            break;
-        }
+        case 14 : 
+            return Operations :: Exit;
     }
 }
 
@@ -291,7 +256,7 @@ void SwitchBody(const Operations &op) {
             cout<<"\n---Enter matrix Elements for 2nd matrix---"<<endl;
             fraction* matrixinput2 = MatrixInput(cols1, cols2);
             cout<<"\nInput Matrix no 2 : "<<endl;
-            DisplayMatrix(matrixinput2, rows1, cols2);
+            DisplayMatrix(matrixinput2, cols1, cols2);
 
             fraction* result = Fraction :: Multiplication(matrixinput1, matrixinput2, rows1, cols1, cols1, cols2);
             cout<<"\nResult : "<<endl;
@@ -369,15 +334,25 @@ void SwitchBody(const Operations &op) {
             cout<<"\nInput Matrix :"<<endl;
             DisplayMatrix(matrixinput, size, size);
 
-            fraction* result = Fraction :: Inverse(matrixinput, size);
-            cout<<"\nResult : "<<endl;
-            DisplayMatrix(matrixinput, size, size);
+            long long det = Fraction :: Determinant(matrixinput, size);
 
-            delete[] matrixinput;
-            delete[] result;
-            matrixinput =  nullptr;
-            result = nullptr;
-            break;
+            if(det == 0) {
+                cout<<"\nThe Matrix has no Inverse!"<<endl;
+                delete[] matrixinput;
+                matrixinput = nullptr;
+                break;
+            }
+            else {
+                fraction* result = Fraction :: Inverse(matrixinput, size);
+                cout<<"\nResult : "<<endl;
+                DisplayMatrix(matrixinput, size, size);
+
+                delete[] matrixinput;
+                delete[] result;
+                matrixinput =  nullptr;
+                result = nullptr;
+                break;
+            }
         }
 
         case Operations :: Row_Echelon_Form : {

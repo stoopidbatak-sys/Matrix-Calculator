@@ -2,12 +2,8 @@
     #define MATRIX_UTILITIES_H
 
 #include "fraction.h"
-char variables[20] = {
-    'x','y','z','w','v',
-    'u','t','s','r','q',
-    'p','o','n','m','l',
-    'k','j','i','h','g'
-};
+int features = 14;
+extern char variables[20];
 
 enum class Operations {
     Transpose,
