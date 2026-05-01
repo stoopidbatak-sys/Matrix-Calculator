@@ -1,30 +1,36 @@
 #ifndef FRACTION_MATRIX_FEATURES_H
     #define FRACTION_MATRIX_FEATURES_H
 
-fraction* Transpose (fraction *matrix, int rows, int cols);
+#include "fraction.h"
 
-fraction* Addition (fraction *matrix1, fraction *matrix2, int rows, int cols);
+namespace Fraction {
 
-fraction* Subtraction (fraction*matrix1, fraction*matrix2, int rows, int cols);
+    fraction* Transpose (fraction *matrix, int rows, int cols);
 
-fraction* Multiplication (fraction *matrix1, fraction *matrix2, int rows1, int cols1, int rows2, int cols2);
+    fraction* Addition (fraction *matrix1, fraction *matrix2, int rows, int cols);
 
-fraction* PowerMatrix(fraction* matrix, int size, int power);
+    fraction* Subtraction (fraction*matrix1, fraction*matrix2, int rows, int cols);
 
-fraction* Inverse (fraction* matrix, int size);
+    fraction* Multiplication (fraction *matrix1, fraction *matrix2, int rows1, int cols1, int rows2, int cols2);
 
-long long Determinant (fraction *matrix, int size);
+    fraction* PowerMatrix(fraction* matrix, int size, int power);
 
-fraction* rowEchelon (fraction* matrix, int rows, int cols, int &rowswaps);
+    fraction* Inverse (fraction* matrix, int size);
 
-fraction* reducedEchelon (fraction* matrix, int rows, int cols, int &rowswaps);
+    long long Determinant (fraction *matrix, int size);
 
-int Rank (fraction *matrix, int rows, int cols);
+    fraction* rowEchelon (fraction* matrix, int rows, int cols, int &rowswaps);
 
-void CramersRule(fraction *Coffmatrix, fraction *Constmatrix, int size); 
+    fraction* reducedEchelon (fraction* matrix, int rows, int cols, int &rowswaps);
 
-void InverseMethod (fraction *Coffmatrix, fraction *Constmatrix, int size);
+    int Rank (fraction *matrix, int rows, int cols);
 
-void Guass_Jordan_Elimination (fraction *Coffmatrix, fraction* Constmatrix, int equations, int variables);
+    void CramersRule(fraction *Coffmatrix, fraction *Constmatrix, int size); 
+
+    void InverseMethod (fraction *Coffmatrix, fraction *Constmatrix, int size);
+
+    void Guass_Jordon_Elimination (fraction *Coffmatrix, fraction* Constmatrix, int equations, int variables);
+
+}
 
 #endif

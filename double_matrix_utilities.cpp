@@ -1,24 +1,21 @@
 #include "double_matrix_utilities.h"
 #include "double_matrix_features.h"
+#include "Matrix_utilities.h"
+#include "fraction.h"
 
 #include <iostream>
 #include <iomanip>
 #include <cmath>
 using namespace std;
- 
 
-double* MatrixInput2 (int rows, int cols) {
-
-    double *matrix = new double[rows*cols];
-
-    for (int i=0; i<rows; i++) {
-        for (int j=0; j<cols; j++) {
-            cout<<"a ["<<i+1<<"] ["<<j+1<<"] : ";
-            cin>>matrix[i*cols + j];        
+double* Fraction_to_Double_Matrix (fraction* matrix, int rows, int cols) {
+    double* temp = new double[rows*cols];
+    for(int i=0; i<rows; i++) {
+        for(int j=0; j<cols; j++) {
+            temp[i*cols+j] = toDouble(matrix[i*cols+j]);
         }
     }
-
-    return matrix;
+    return temp;
 }
 
 void DisplayMatrix (double* matrix, int rows, int cols) {
@@ -70,8 +67,21 @@ void DisplayInverse (double* matrix, double* inverse, int size) {
     cout<<"--"<<endl;
     for (int i=0; i<3*size+size/2+1; i++) 
         cout<<" ";
-    double det = (double)Determinant(matrix, size);
+    double det = (double)Double :: Determinant(matrix, size);
     cout<<det<<endl;
+}
+
+void Equations(double* Augmatrix, int rows, int cols) {
+    for(int i=0; i<rows; i++) {
+        cout<<"\n"<<Augmatrix[i*cols]<<::variables[0];
+        for(int j=1; j<cols-1; j++) {
+            if(Augmatrix[i*cols+j] < 0)
+                cout<<" - "<<-Augmatrix[i*cols+j]<<::variables[j];
+            else 
+                cout<<" + "<<Augmatrix[i*cols+j]<<::variables[j];
+        }
+        cout<<" = "<<Augmatrix[i*cols+cols-1]<<endl;
+    }
 }
 
 void scalarMultiplication(double *matrix, int rows, int cols, double scalar) {
@@ -103,7 +113,7 @@ double* Minor (double* matrix, int size, int row, int col) {
 }
 
 double cofactor (double* minor, int size, int row, int col) {
-    double cofactor = pow(-1, (row+col))*Determinant(minor, size);
+    double cofactor = pow(-1, (row+col))*Double ::Determinant(minor, size);
     return cofactor;
 }
 
@@ -207,29 +217,6 @@ bool Inconsistency_check(double* reducedEchelonform, int Rank, int rows, int col
         }
     }
     return check;
-}
-
-double* RandomMatrix (int rows, int cols) {
-    double* temp = new double[rows*cols];
-    for(int i=0; i<rows; i++) {
-        for(int j=0; j<cols; j++) {
-            temp[i*cols+j] = rand()%15-6;
-        }
-    }
-    return temp;
-}
-
-double* IdentityGenerator(int size) {
-    double* temp = new double[size*size];
-    for(int i=0; i<size; i++) {
-        for(int j=0; j<size; j++) {
-            if(i==j)
-                temp[i*size + j] = 1;
-            else
-                temp[i*size + j] = 0;
-        }
-    }
-    return temp;
 }
 
 void MatrixCleanup (double* matrix, int rows, int cols) {

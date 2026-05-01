@@ -1,10 +1,14 @@
 #ifndef DOUBLE_MATRIX_UTILITIES_H
     #define DOUBLE_MATRIX_UTILITIES_H
 
-double* MatrixInput2 (int rows, int cols);
+#include "fraction.h"
+
+double* Fraction_to_Double_Matrix (fraction* matrix, int rows, int cols);
 
 void DisplayMatrix (double* matrix, int rows, int cols);
 void DisplayInverse (double* matrix, double* inverse, int size);
+
+void Equations(double* Augmatrix, int rows, int cols);
 
 void scalarMultiplication(double *matrix, int rows, int cols, double scalar);
 void scalarDivision(double *matrix, int rows, int cols, double scalar);
@@ -29,8 +33,6 @@ bool* freeVariables (double* reducedEchelonform, int Rank, int cols);
 bool Inconsistency_check(double* reducedEchelonform, int Rank, int rows, int cols);
 
 void MatrixCleanup (double* matrix, int rows, int cols);
-double* RandomMatrix (int rows, int cols);
-double* IdentityGenerator (int size);
 double* Copy(double* matrix, int rows, int cols);
 
 #endif

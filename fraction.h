@@ -122,7 +122,7 @@ class fraction {
 
         bool operator < (const int &number) const;
 
-        bool operator <= (const int number) const;
+        bool operator <= (const int &number) const;
 
         bool operator > (const float &number) const;
 
@@ -146,6 +146,7 @@ class fraction {
         
         fraction toFraction(const float &value) const;
 
+    friend double toDouble(const fraction &obj);
     friend std::istream& operator >> (std::istream &in, fraction &obj);
     friend std::ostream& operator << (std::ostream &out, const fraction &obj);
 };

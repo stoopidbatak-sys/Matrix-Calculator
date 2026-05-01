@@ -1,30 +1,34 @@
 #ifndef DOUBLE_MATRIX_FEATURES_H
     #define DOUBLE_MATRIX_FEATURES_H
 
-double* Transpose (double *matrix, int rows, int cols);
+namespace Double { 
 
-double* Addition (double *matrix1, double *matrix2, int rows, int cols);
+    double* Transpose (double *matrix, int rows, int cols);
 
-double* Subtraction (double *matrix1, double *matrix2, int rows, int cols);
+    double* Addition (double *matrix1, double *matrix2, int rows, int cols);
 
-double* Multiplication (double *matrix1, double *matrix2, int rows1, int cols1, int rows2, int cols2);
+    double* Subtraction (double *matrix1, double *matrix2, int rows, int cols);
 
-double* PowerMatrix(double* matrix, int size, int power);
+    double* Multiplication (double *matrix1, double *matrix2, int rows1, int cols1, int rows2, int cols2);
 
-double* Inverse (double* matrix, int size);
+    double* PowerMatrix(double* matrix, int size, int power);
 
-long long Determinant (double *matrix, int size);
+    double* Inverse (double* matrix, int size);
 
-double* rowEchelon (double* matrix, int rows, int cols, int &rowswaps);
+    long long Determinant (double *matrix, int size);
 
-double* reducedEchelon (double* matrix, int rows, int cols, int &rowswaps);
+    double* rowEchelon (double* matrix, int rows, int cols, int &rowswaps);
 
-int Rank (double *matrix, int rows, int cols);
+    double* reducedEchelon (double* matrix, int rows, int cols, int &rowswaps);
 
-void CramersRule(double *Coffmatrix, double *Constmatrix, int size); 
+    int Rank (double *matrix, int rows, int cols);
 
-void InverseMethod (double *Coffmatrix, double *Constmatrix, int size);
+    void CramersRule(double *Coffmatrix, double *Constmatrix, int size); 
 
-void Guass_Jordan_Elimination (double *Coffmatrix, double* Constmatrix, int equations, int variables);
+    void InverseMethod (double *Coffmatrix, double *Constmatrix, int size);
+
+    void Guass_Jordon_Elimination (double *Coffmatrix, double* Constmatrix, int equations, int variables);
+
+}
 
 #endif

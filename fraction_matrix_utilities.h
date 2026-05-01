@@ -3,9 +3,11 @@
 
 #include "fraction.h"
 
-fraction* MatrixInput2 (int rows, int cols);
+fraction* Double_to_Fraction_Matrix(double* matrix, int rows, int cols);
 
 void DisplayMatrix (fraction* matrix, int rows, int cols);
+
+void Equations(fraction* Augmatrix, int rows, int cols);
 
 void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar);
 void scalarDivision(fraction *matrix, int rows, int cols, fraction scalar);

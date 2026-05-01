@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cmath>
     
-fraction :: fraction(long long num = 0, long long den = 1) {
+fraction :: fraction(long long num, long long den) {
     this->num = num;
     this->den = den;
     
@@ -345,9 +345,8 @@ fraction& fraction :: operator = (const double &number) {
 }
 
 bool fraction :: operator == (const fraction &obj) const {
-    if (num == obj.num) 
-    if(den == obj.den)
-    return true;
+    if (num == obj.num && den == obj.den)
+        return true;
     return false;
 }
 
@@ -410,7 +409,7 @@ bool fraction :: operator < (const int &number) const {
     return (num < (number*den));
 }
 
-bool fraction :: operator <= (const int number) const {
+bool fraction :: operator <= (const int &number) const {
     return (*this < number || *this == number);
 }
 
@@ -481,6 +480,11 @@ fraction fraction :: toFraction(const float &value) const {
     denominator /= g;
         
     return fraction(numerator, denominator);
+}
+
+double toDouble (const fraction &obj) {
+    double temp = obj.num/obj.den;
+    return temp;
 }
 
 std::istream& operator >> (std::istream &in, fraction &obj) {

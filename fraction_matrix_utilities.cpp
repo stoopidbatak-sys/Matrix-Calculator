@@ -1,23 +1,20 @@
 #include "fraction_matrix_utilities.h"
 #include "fraction_matrix_features.h"
+#include "Matrix_utilities.h"
 
 #include <iostream>
 #include <iomanip>
 #include <cmath>
 using namespace std;
 
-fraction* MatrixInput2 (int rows, int cols) {
-
-    fraction *matrix = new fraction[rows*cols];
-
-    for (int i=0; i<rows; i++) {
-        for (int j=0; j<cols; j++) {
-            cout<<"a ["<<i+1<<"] ["<<j+1<<"] : ";
-            cin>>matrix[i*cols + j];        
+fraction* Double_to_Fraction_Matrix(double* matrix, int rows, int cols) {
+    fraction* temp = new fraction[rows*cols];
+    for(int i=0; i<rows; i++) {
+        for(int j=0; j<cols; j++) {
+            temp[i*cols+j] = matrix[i*cols+j];
         }
     }
-
-    return matrix;
+    return temp;
 }
 
 void DisplayMatrix (fraction* matrix, int rows, int cols) {
@@ -61,6 +58,19 @@ void DisplayAugmented (fraction* Augmatrix, int rows, int cols) {
     cout<<"--"<<endl;
 }
 
+void Equations(fraction* Augmatrix, int rows, int cols) {
+    for(int i=0; i<rows; i++) {
+        cout<<"\n"<<Augmatrix[i*cols]<<::variables[0];
+        for(int j=1; j<cols-1; j++) {
+            if(Augmatrix[i*cols+j] < 0)
+                cout<<" - "<<-Augmatrix[i*cols+j]<<::variables[j];
+            else 
+                cout<<" + "<<Augmatrix[i*cols+j]<<::variables[j];
+        }
+        cout<<" = "<<Augmatrix[i*cols+cols-1]<<endl;
+    }
+}
+
 void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar) {
     for(int i=0; i<rows; i++) {
         scaledRow(matrix, cols, i+1, scalar);
@@ -90,7 +100,7 @@ fraction* Minor (fraction* matrix, int size, int row, int col) {
 }
 
 fraction cofactor (fraction* minor, int size, int row, int col) {
-    fraction cofactor = pow(-1, (row+col))*Determinant(minor, size);
+    fraction cofactor = pow(-1, (row+col))*Fraction :: Determinant(minor, size);
     return cofactor;
 }
 
