@@ -93,7 +93,7 @@ int InputChoice() {
     cout<<"\nEnter your choice : ";
     cin>>choice;
 
-    while(choice < 1 || choice > features) {
+    while(choice < 1 || choice > 14) {
         cout<<"Invalid Input!"<<endl;
         cout<<"Input a number from 1-14 : ";    
         cin>>choice;

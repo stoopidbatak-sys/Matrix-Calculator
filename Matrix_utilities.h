@@ -2,7 +2,6 @@
     #define MATRIX_UTILITIES_H
 
 #include "fraction.h"
-int features = 14;
 extern char variables[20];
 
 enum class Operations {
