@@ -42,7 +42,7 @@ void Features() {
     cout<<"10 --> Rank of Matrix"<<endl;
     cout<<"11 --> Cramer's Rule"<<endl;
     cout<<"12 --> Inverse Method"<<endl;
-    cout<<"13 --> Guass-Jordon Elimination"<<endl;
+    cout<<"13 --> Guass-Jordan Elimination"<<endl;
     cout<<"14 --> Exit"<<endl;
 }
 
@@ -324,7 +324,7 @@ void SwitchBody(const Operations &op) {
         }
 
         case Operations :: Inverse : {
-            cout<<"\n=====Operation Selected : Determinant====="<<endl<<endl; 
+            cout<<"\n=====Operation Selected : Inverse====="<<endl<<endl; 
 
             cout<<"---Enter the Size of your Matrix---"<<endl;
             int size;
@@ -435,9 +435,14 @@ void SwitchBody(const Operations &op) {
             int size;
             cout<<"\nNo of Equations = No of Variables : ";
             cin>>size;
+            while (size <= 0) {
+                cout<<"Enter a Positive Integer!"<<endl;
+                cout<<"No of Equations = No of Variables : ";
+                cin>>size;
+            }
 
-            double Coffmatrix[size*size] = {};
-            double Constmatrix[size] = {};
+            double* Coffmatrix = new double[size*size];
+            double* Constmatrix = new double[size];
             cout<<"Enter values for equations :"<<endl;
             for(int i=0; i<size; i++) {
                 cout<<"\nEquation no "<<i+1<<" : "<<endl;
@@ -456,7 +461,11 @@ void SwitchBody(const Operations &op) {
             cout<<"\n====Solution===="<<endl;
             Double :: CramersRule(Coffmatrix, Constmatrix, size);
 
+            delete[] Coffmatrix;
+            delete[] Constmatrix;
             delete[] AugMatrix;
+            Coffmatrix = nullptr;
+            Constmatrix = nullptr;
             AugMatrix = nullptr;
             break;
         }
@@ -468,9 +477,14 @@ void SwitchBody(const Operations &op) {
             int size;
             cout<<"\nNo of Equations = No of Variables : ";
             cin>>size;
+            while (size <= 0) {
+                cout<<"Enter a Positive Integer!"<<endl;
+                cout<<"No of Equations = No of Variables : ";
+                cin>>size;
+            }
 
-            double Coffmatrix[size*size] = {};
-            double Constmatrix[size] = {};
+            double* Coffmatrix = new double[size*size];
+            double* Constmatrix = new double[size];
             cout<<"Enter values for equations :"<<endl;
             for(int i=0; i<size; i++) {
                 cout<<"\nEquation no "<<i+1<<" : "<<endl;
@@ -489,7 +503,11 @@ void SwitchBody(const Operations &op) {
             cout<<"\n====Solution===="<<endl;
             Double :: InverseMethod(Coffmatrix, Constmatrix, size);
 
+            delete[] Coffmatrix;
+            delete[] Constmatrix;
             delete[] AugMatrix;
+            Coffmatrix = nullptr;
+            Constmatrix = nullptr;
             AugMatrix = nullptr;
             break;
         }
@@ -501,11 +519,21 @@ void SwitchBody(const Operations &op) {
             int rows, cols;
             cout<<"No of Equations : ";
             cin>>rows;
+            while (rows <= 0) {
+                cout<<"Enter a Positive Integer!"<<endl;
+                cout<<"No of Equations : ";
+                cin>>rows;
+            }
             cout<<"No of Variables : ";
             cin>>cols;
+            while (cols <= 0) {
+                cout<<"Enter a Positive Integer!"<<endl;
+                cout<<"No of Variables : ";
+                cin>>cols;
+            }
 
-            fraction Coffmatrix[rows*cols] = {};
-            fraction Constmatrix[rows] = {};
+            fraction* Coffmatrix = new fraction[rows*cols];
+            fraction* Constmatrix = new fraction[rows];
             cout<<"Enter values for equations :"<<endl;
             for(int i=0; i<rows; i++) {
                 cout<<"\nEquation no "<<i+1<<" : "<<endl;
@@ -525,10 +553,15 @@ void SwitchBody(const Operations &op) {
             DisplayAugmented(AugMatrix, rows, cols+1);
 
             cout<<"\n====Solution===="<<endl;
-            Fraction :: Guass_Jordon_Elimination(Coffmatrix, Constmatrix, rows, cols);
+            Fraction :: Guass_Jordan_Elimination(Coffmatrix, Constmatrix, rows, cols);
 
+            delete[] Coffmatrix;
+            delete[] Constmatrix;
             delete[] AugMatrix;
+            Coffmatrix = nullptr;
+            Constmatrix = nullptr;
             AugMatrix = nullptr;
+
             break;
         }
 
