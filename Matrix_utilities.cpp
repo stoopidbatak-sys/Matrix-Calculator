@@ -166,7 +166,7 @@ void SwitchBody(const Operations &op) {
 
             fraction* result = Fraction :: Transpose(matrixinput, rows, cols);
             cout<<"\nResult :"<<endl;
-            DisplayMatrix(result, rows, cols);
+            DisplayMatrix(result, cols, rows);
 
             delete[] matrixinput;
             delete[] result;
