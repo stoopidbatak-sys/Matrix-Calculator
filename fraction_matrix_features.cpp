@@ -87,22 +87,26 @@ namespace Fraction {
         fraction* result = Transpose(temp, size, size);
         delete[] temp; 
 
-        long long Det = Determinant(matrix, size);
-        fraction determinant(Det);
+        fraction determinant = Determinant(matrix, size);
         scalarDivision(result, size, size, determinant);
         return result;
     }
 
-    long long Determinant (fraction* matrix, int size) {
+    fraction Determinant (fraction* matrix, int size) {
         int rowswaps = 0;
-        fraction* temp = rowEchelon(matrix, size, size, rowswaps);
-        fraction det = 1;
+        fraction* copy = Copy(matrix, size, size);
+        fraction factor = DeterminantSimplifier(copy, size);
+        fraction* temp = rowEchelon(copy, size, size, rowswaps);
+        fraction determinant = 1;
         for (int i=0; i<size; i++) {
-            det *= temp[i*size+i];
+            determinant *= temp[i*size+i];
         }
+        delete[] copy;
         delete[] temp;
-        det *= pow(-1, rowswaps);
-        long long determinant = det.getNum();
+        copy = nullptr;
+        temp = nullptr;
+        determinant *= pow(-1, rowswaps);
+        determinant *= factor;
         return determinant;
     }
 
@@ -195,13 +199,12 @@ namespace Fraction {
 
     void CramersRule(fraction*Coffmatrix, fraction*Constmatrix, int size) {
         fraction *temp = new fraction[size*size];
-        long long matrixdet(Determinant(Coffmatrix, size));
+        fraction matrixdet = Determinant(Coffmatrix, size);
         if(matrixdet == 0) {
             cout<<"Singular Matrix!"<<endl;
             return;
         }
         int a=0;
-        fraction solution;
         for(int i=0; i<size; i++) {
             for(int i=0; i<size; i++) {
                 for(int j=0; j<size; j++) {
@@ -211,7 +214,8 @@ namespace Fraction {
                         temp[i*size+j] = Coffmatrix[i*size+j];
                 }
             }
-                solution.Set(matrixdet, Determinant(temp, size));
+                fraction solution = Determinant(temp, size);
+                solution /= matrixdet;
                 cout<<::variables[i]<<" = "<<solution<<endl;
                 a++;
         }
@@ -249,14 +253,12 @@ namespace Fraction {
         }
 
         bool* free_variables = freeVariables(reducedEchelonform, rank, cols);
-        //fraction solution[cols-1];
-        int row;
         for(int i=0; i<cols-1; i++) {
             if(free_variables[i]) {
                 cout<<::variables[i]<<" = "<<"free variable"<<endl;
             }
             else {
-                row = leadingPlacetoRow(reducedEchelonform, rank, cols, i+1)-1;
+                int row = leadingPlacetoRow(reducedEchelonform, rank, cols, i+1)-1;
                 cout<<::variables[i]<<" = "<<reducedEchelonform[row*cols+cols-1];      
                 for(int j=i+1; j<cols-1; j++) {
                     if(free_variables[j]) {

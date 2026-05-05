@@ -38,6 +38,10 @@ class fraction {
 
         fraction& operator += (const double &number);
 
+        fraction operator + (const long long &number) const;
+
+        fraction& operator += (const long long &number);
+
         fraction operator - (const fraction &obj) const;
         
         fraction& operator -= (const fraction &obj);
@@ -53,6 +57,10 @@ class fraction {
         fraction operator - (const double &number) const;
 
         fraction& operator -= (const double &number);
+
+        fraction operator - (const long long &number) const;
+        
+        fraction& operator -= (const long long &number);
         
         fraction operator * (const fraction &obj) const;
 
@@ -69,6 +77,10 @@ class fraction {
         fraction operator * (const double &scalar) const;
         
         fraction& operator *= (const double &scalar);
+
+        fraction operator * (const long long &scalar) const;
+        
+        fraction& operator *= (const long long &scalar);
         
         fraction operator / (const fraction &obj) const;
 
@@ -85,12 +97,18 @@ class fraction {
         fraction operator / (const double &scalar) const;
         
         fraction& operator /= (const double &scalar);
+
+        fraction operator / (const long long &scalar) const;
+        
+        fraction& operator /= (const long long &scalar);
         
         fraction& operator = (const int &number); 
 
         fraction& operator = (const float &number);
         
         fraction& operator = (const double &number);
+
+        fraction& operator = (const long long &number); 
 
         bool operator == (const fraction &obj) const;
         
@@ -107,6 +125,10 @@ class fraction {
         bool operator == (const double &number) const;
         
         bool operator != (const double &number) const;
+
+        bool operator == (const long long &number) const;
+        
+        bool operator != (const long long &number) const;
 
         bool operator > (const fraction &obj) const;
         
@@ -139,6 +161,14 @@ class fraction {
         bool operator < (const double &number) const;
         
         bool operator <= (const double &number) const;
+
+        bool operator > (const long long &number) const;
+
+        bool operator >= (const long long &number) const;
+
+        bool operator < (const long long &number) const;
+
+        bool operator <= (const long long &number) const;
         
         fraction operator - () const;
         

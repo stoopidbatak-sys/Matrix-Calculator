@@ -33,8 +33,6 @@ fraction* MatrixInput(int rows, int cols);
 
 int InputChoice();
 
-void Equations(double* Augmatrix, int rows, int cols);
-
 Operations InputEnum(int choice);
 
 void SwitchBody(const Operations &op);

@@ -17,7 +17,7 @@ namespace Fraction {
 
     fraction* Inverse (fraction* matrix, int size);
 
-    long long Determinant (fraction *matrix, int size);
+    fraction Determinant (fraction *matrix, int size);
 
     fraction* rowEchelon (fraction* matrix, int rows, int cols, int &rowswaps);
 

@@ -213,7 +213,9 @@ namespace Double {
                 num = Determinant(temp, size);
                 den = matrixdet;
                 Simplifier(num, den);
-                cout<<::variables[i]<<" = "<<num<<"/"<<den<<endl;
+                cout<<::variables[i]<<" = "<<num;
+                if (den != 1)
+                    cout<<"/"<<den<<endl;
                 a++;
         }
 
@@ -230,7 +232,9 @@ namespace Double {
             den = det;
             num = product[i];
             Simplifier(num, den);
-            cout<<::variables[i]<<" = "<<num<<"/"<<den<<endl;
+            cout<<::variables[i]<<" = "<<num;
+            if (den != 1)
+                cout<<"/"<<den<<endl;
         }
 
         delete[] inverse;
@@ -252,14 +256,12 @@ namespace Double {
         }
 
         bool* free_variables = freeVariables(reducedEchelonform, rank, cols);
-        //double solution[cols-1];
-        int row;
         for(int i=0; i<cols-1; i++) {
             if(free_variables[i]) {
                 cout<<::variables[i]<<" = "<<"free variable"<<endl;
             }
             else {
-                row = leadingPlacetoRow(reducedEchelonform, rank, cols, i+1)-1;
+                int row = leadingPlacetoRow(reducedEchelonform, rank, cols, i+1)-1;
                 cout<<::variables[i]<<" = "<<reducedEchelonform[row*cols+cols-1];      
                 for(int j=i+1; j<cols-1; j++) {
                     if(free_variables[j]) {

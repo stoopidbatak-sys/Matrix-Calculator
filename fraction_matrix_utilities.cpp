@@ -1,6 +1,7 @@
 #include "fraction_matrix_utilities.h"
 #include "fraction_matrix_features.h"
 #include "Matrix_utilities.h"
+#include "basic_utilities.h"
 
 #include <iostream>
 #include <iomanip>
@@ -71,6 +72,59 @@ void Equations(fraction* Augmatrix, int rows, int cols) {
     }
 }
 
+void EquationSimplifier(fraction* Coffmatrix, fraction* Constmatrix, int equations, int variables) {
+    for(int i=0; i<equations; i++) {
+        for(int j=0; j<variables; j++) {
+            if(Coffmatrix[i*variables+j].getDen() != 1) {
+                fraction scalar(Coffmatrix[i*variables+j].getDen());
+                scaledRow(Coffmatrix, variables, i+1, scalar);
+                Constmatrix[i] *= scalar;
+            }
+        }
+        if(Constmatrix[i].getDen() != 1) {
+            fraction scalar(Constmatrix[i].getDen());
+            scaledRow(Coffmatrix, variables, i+1, scalar);
+            Constmatrix[i] *= scalar;
+        }
+    }
+
+    fraction* Augmatrix = AugmentedMatrix(Coffmatrix, Constmatrix, equations, variables);
+    for(int i=0; i<equations; i++) {
+        fraction* row = getRow(Augmatrix, variables+1, i+1);
+        fraction factor = rowfactor(row, variables+1);
+        if(factor != 0) {
+            descaledRow(Coffmatrix, variables, i+1, factor);
+            Constmatrix[i] /= factor;
+        }
+        delete[] row;
+    }
+}
+
+fraction DeterminantSimplifier (fraction* matrix, int size) {
+    fraction factor = 1;
+    for(int i=0; i<size; i++) {
+        for(int j=0; j<size; j++) {
+            fraction den = matrix[i*size+j].getDen();
+            if (den != 1) {
+                factor /= den;
+                scaledRow(matrix, size, i+1, den);
+            }
+        }
+    }
+
+    for(int i=0; i<size; i++) {
+        fraction* row = getRow(matrix, size, i+1);
+        fraction common = rowfactor(row, size);
+        factor *= common;
+        if (common != 0) {
+            descaledRow(matrix, size, i+1, common);
+        }
+        delete[] row;
+    }
+
+    return factor;
+}
+
 void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar) {
     for(int i=0; i<rows; i++) {
         scaledRow(matrix, cols, i+1, scalar);
@@ -100,8 +154,27 @@ fraction* Minor (fraction* matrix, int size, int row, int col) {
 }
 
 fraction cofactor (fraction* minor, int size, int row, int col) {
-    fraction cofactor = pow(-1, (row+col))*Fraction :: Determinant(minor, size);
+    fraction cofactor = Fraction :: Determinant(minor, size)*pow(-1, (row+col));
     return cofactor;
+}
+
+fraction* getRow (fraction* matrix, int cols, int row) {
+    fraction* rowarray = new fraction[cols];
+    for(int i=0; i<cols; i++) {
+        rowarray[i] = matrix[(row-1)*cols+i];
+    }
+    return rowarray;
+}
+
+fraction rowfactor(fraction* row, int cols) {
+    if(cols == 1)
+        return row[0];
+
+    fraction divisors[cols-1];
+    for(int i=0; i<cols-1; i++) {
+        divisors[i] = fraction(gcd(row[i].getNum(), row[i+1].getNum()));
+    }
+    return rowfactor(divisors, cols-1);
 }
 
 void rowswap (fraction* matrix, int cols, int row1, int row2) {
