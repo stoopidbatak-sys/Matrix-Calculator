@@ -1,41 +1,56 @@
 #ifndef FRACTION_MATRIX_UTILITIES_H
     #define FRACTION_MATRIX_UTILITIES_H
 
-#include "fraction.h"
+    #include "config.h"
+    #include "fraction.h"
 
-fraction* Double_to_Fraction_Matrix(double* matrix, int rows, int cols);
+    #if DEV_MODE
 
-void Equations(fraction* Augmatrix, int rows, int cols);
-void EquationSimplifier(fraction* Coffmatrix, fraction* Constmatrix, int equations, int variables);
+        fraction* Double_to_Fraction_Matrix(double* matrix, int rows, int cols);
 
-fraction DeterminantSimplifier (fraction* matrix, int size);
+    #endif
 
-void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar);
-void scalarDivision(fraction *matrix, int rows, int cols, fraction scalar);
+    void Equations(fraction* Augmatrix, int rows, int cols);
+    void EquationSimplifier(fraction* Coffmatrix, fraction* Constmatrix, int equations, int variables);
 
-fraction* Minor (fraction* matrix, int size, int row, int col);
-fraction cofactor (fraction* minor, int size, int row, int col);
+    fraction DeterminantSimplifier (fraction* matrix, int size);
 
-fraction* getRow (fraction* matrix, int cols, int row);
-fraction rowfactor(fraction* row, int cols);
+    #if DEV_MODE
 
-void rowswap (fraction* matrix, int cols, int row1, int row2);
-void columnswap (fraction* matrix, int rows, int cols, int col1, int col2);
-void scaledRow (fraction* matrix, int cols, int row, fraction scalar);
-void scaledCol (fraction* matrix, int rows, int cols, int col, fraction scalar);
-void descaledRow (fraction* matrix, int cols, int row, fraction scalar);
-void descaledCol (fraction* matrix, int rows, int cols, int col, fraction scalar);
-void rowaddition (fraction* matrix, int cols, int rowout, int rowin, fraction scalar);
+        void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar);
+        
+    #endif
 
-fraction* AugmentedMatrix(fraction* Coffmatrix, fraction*Constmatrix, int equations, int variables);
+    void scalarDivision(fraction *matrix, int rows, int cols, fraction scalar);
 
-int rowtoLeadingPlace (fraction* Echelonform, int cols, int input_row);
-int leadingPlacetoRow (fraction* Echelonform, int Rank, int cols, int leadingPlace);
-bool* freeVariables (fraction* reducedEchelonform, int Rank, int cols);
-bool Inconsistency_check(fraction* reducedEchelonform, int Rank, int rows, int cols);
+    fraction* Minor (fraction* matrix, int size, int row, int col);
+    fraction cofactor (fraction* minor, int size, int row, int col);
 
-fraction* RandomMatrix (int rows, int cols);
-fraction* IdentityGenerator (int size);
-fraction* Copy(fraction* matrix, int rows, int cols);
+    fraction* getRow (fraction* matrix, int cols, int row);
+    fraction rowfactor(fraction* row, int cols);
+
+    void rowswap (fraction* matrix, int cols, int row1, int row2);
+    void columnswap (fraction* matrix, int rows, int cols, int col1, int col2);
+    void scaledRow (fraction* matrix, int cols, int row, fraction scalar);
+    void scaledCol (fraction* matrix, int rows, int cols, int col, fraction scalar);
+    void descaledRow (fraction* matrix, int cols, int row, fraction scalar);
+    void descaledCol (fraction* matrix, int rows, int cols, int col, fraction scalar);
+    void rowaddition (fraction* matrix, int cols, int rowout, int rowin, fraction scalar);
+
+    fraction* AugmentedMatrix(fraction* Coffmatrix, fraction*Constmatrix, int equations, int variables);
+
+    int rowtoLeadingPlace (fraction* Echelonform, int cols, int input_row);
+    int leadingPlacetoRow (fraction* Echelonform, int Rank, int cols, int leadingPlace);
+    bool* freeVariables (fraction* reducedEchelonform, int Rank, int cols);
+    bool Inconsistency_check(fraction* reducedEchelonform, int Rank, int rows, int cols);
+
+    #if DEV_MODE
+
+        fraction* RandomMatrix (int rows, int cols);
+        fraction* IdentityGenerator (int size);
+        
+    #endif
+
+    fraction* Copy(fraction* matrix, int rows, int cols);
 
 #endif

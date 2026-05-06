@@ -1,3 +1,4 @@
+#include "config.h"
 #include <iostream>
 #include "Matrix_utilities.h"
 
@@ -9,7 +10,7 @@ int main() {
     SwitchBody(Task);
 
     while (Task != Operations :: Exit) {
-        std::cout<<"\n===Perform Another Task==="<<std::endl;
+        std::cout<<"\n\n===Perform Another Task==="<<std::endl;
         Features();
         choice = InputChoice();
         Task = InputEnum(choice);

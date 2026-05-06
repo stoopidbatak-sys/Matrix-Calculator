@@ -1,34 +1,52 @@
 #ifndef DOUBLE_MATRIX_FEATURES_H
     #define DOUBLE_MATRIX_FEATURES_H
 
-namespace Double { 
+    #include "config.h"
 
-    double* Transpose (double *matrix, int rows, int cols);
+    namespace Double { 
 
-    double* Addition (double *matrix1, double *matrix2, int rows, int cols);
+        
+        double* Transpose (double *matrix, int rows, int cols);
+        
+        #if DEV_MODE 
 
-    double* Subtraction (double *matrix1, double *matrix2, int rows, int cols);
+            double* Addition (double *matrix1, double *matrix2, int rows, int cols);
 
-    double* Multiplication (double *matrix1, double *matrix2, int rows1, int cols1, int rows2, int cols2);
+            double* Subtraction (double *matrix1, double *matrix2, int rows, int cols);
 
-    double* PowerMatrix(double* matrix, int size, int power);
+        #endif
 
-    double* Inverse (double* matrix, int size);
+            double* Multiplication (double *matrix1, double *matrix2, int rows1, int cols1, int rows2, int cols2);
 
-    long long Determinant (double *matrix, int size);
+        #if DEV_MODE
 
-    double* rowEchelon (double* matrix, int rows, int cols, int &rowswaps);
+            double* PowerMatrix(double* matrix, int size, int power);
+            
+        #endif
+        
+        double* Inverse (double* matrix, int size);
 
-    double* reducedEchelon (double* matrix, int rows, int cols, int &rowswaps);
+        long long Determinant (double *matrix, int size);
 
-    int Rank (double *matrix, int rows, int cols);
+        double* rowEchelon (double* matrix, int rows, int cols, int &rowswaps);
 
-    void CramersRule(double *Coffmatrix, double *Constmatrix, int size); 
+        #if DEV_MODE
 
-    void InverseMethod (double *Coffmatrix, double *Constmatrix, int size);
+            double* reducedEchelon (double* matrix, int rows, int cols, int &rowswaps);
 
-    void Guass_Jordan_Elimination (double *Coffmatrix, double* Constmatrix, int equations, int variables);
+        #endif
 
-}
+        int Rank (double *matrix, int rows, int cols);
+
+        void CramersRule(double *Coffmatrix, double *Constmatrix, int size); 
+
+        void InverseMethod (double *Coffmatrix, double *Constmatrix, int size);
+
+        #if DEV_MODE
+
+            void Guass_Jordan_Elimination (double *Coffmatrix, double* Constmatrix, int equations, int variables);
+
+        #endif
+    }
 
 #endif

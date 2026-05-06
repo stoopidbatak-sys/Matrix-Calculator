@@ -1,3 +1,4 @@
+#include "config.h"
 #include "double_matrix_utilities.h"
 #include "double_matrix_features.h"
 #include "Matrix_utilities.h"
@@ -18,83 +19,34 @@ double* Fraction_to_Double_Matrix (fraction* matrix, int rows, int cols) {
     return temp;
 }
 
-void DisplayMatrix (double* matrix, int rows, int cols) {
-    cout<<" --";
-    for (int i=0; i<7*cols; i++) 
-        cout<<" ";
-    cout<<"--"<<endl;
+#if DEV_MODE 
 
-    for (int i=0; i<rows; i++) {
-        cout<<"|";
-        for (int j=0; j<cols; j++) {
-            cout<<" "<<setw(5)<<matrix[i*cols+j]<<" ";
+    void Equations(double* Augmatrix, int rows, int cols) {
+        for(int i=0; i<rows; i++) {
+            cout<<Augmatrix[i*cols]<<::variables[0];
+            for(int j=1; j<cols-1; j++) {
+                if(Augmatrix[i*cols+j] < 0)
+                    cout<<" - "<<-Augmatrix[i*cols+j]<<::variables[j];
+                else 
+                    cout<<" + "<<Augmatrix[i*cols+j]<<::variables[j];
+            }
+            cout<<" = "<<Augmatrix[i*cols+cols-1]<<endl;
         }
-        cout<<"    |"<<endl;
     }
 
-    cout<<" --";
-    for (int i=0; i<7*cols; i++) 
-        cout<<" ";
-    cout<<"--"<<endl;
-}    
-
-void DisplayAugmented (double* Augmatrix, int rows, int cols) {
-    cout<<" --";
-    for (int i=0; i<7*cols+5; i++) 
-        cout<<" ";
-    cout<<"--"<<endl;
-
-    for (int i=0; i<rows; i++) {
-        cout<<"|";
-        for (int j=0; j<cols-1; j++) {
-            cout<<" "<<setw(5)<<Augmatrix[i*cols+j]<<" ";
+    void scalarMultiplication(double *matrix, int rows, int cols, double scalar) {
+        for(int i=0; i<rows; i++) {
+            scaledRow(matrix, cols, i+1, scalar);
         }
-        cout<<"    | "<<setw(5)<<Augmatrix[i*cols+cols-1]<<" ";
-        cout<<"    |"<<endl;
     }
 
-    cout<<" --";
-    for (int i=0; i<7*cols+5; i++) 
-        cout<<" ";
-    cout<<"--"<<endl;
-}
-
-void DisplayInverse (double* matrix, double* inverse, int size) {
-    DisplayMatrix(inverse, size, size);
-    cout<<" --";
-    for (int i=0; i<7*size; i++) 
-        cout<<"-";
-    cout<<"--"<<endl;
-    for (int i=0; i<3*size+size/2+1; i++) 
-        cout<<" ";
-    double det = (double)Double :: Determinant(matrix, size);
-    cout<<det<<endl;
-}
-
-void Equations(double* Augmatrix, int rows, int cols) {
-    for(int i=0; i<rows; i++) {
-        cout<<Augmatrix[i*cols]<<::variables[0];
-        for(int j=1; j<cols-1; j++) {
-            if(Augmatrix[i*cols+j] < 0)
-                cout<<" - "<<-Augmatrix[i*cols+j]<<::variables[j];
-            else 
-                cout<<" + "<<Augmatrix[i*cols+j]<<::variables[j];
+    void scalarDivision(double *matrix, int rows, int cols, double scalar) {
+        for(int i=0; i<rows; i++) {
+            descaledRow(matrix, cols, i+1, scalar);
         }
-        cout<<" = "<<Augmatrix[i*cols+cols-1]<<endl;
     }
-}
 
-void scalarMultiplication(double *matrix, int rows, int cols, double scalar) {
-    for(int i=0; i<rows; i++) {
-        scaledRow(matrix, cols, i+1, scalar);
-    }
-}
-
-void scalarDivision(double *matrix, int rows, int cols, double scalar) {
-    for(int i=0; i<rows; i++) {
-        descaledRow(matrix, cols, i+1, scalar);
-    }
-}
+    #endif
 
 double* Minor (double* matrix, int size, int row, int col) {
     double* cofactor = new double[(size-1)*(size-1)];
@@ -116,6 +68,7 @@ double cofactor (double* minor, int size, int row, int col) {
     double cofactor = pow(-1, (row+col))*Double ::Determinant(minor, size);
     return cofactor;
 }
+
 
 void rowswap (double* matrix, int cols, int row1, int row2) {
     for(int i=0; i<cols; i++) {
@@ -163,61 +116,65 @@ void rowaddition (double* matrix, int cols, int rowout, int rowin, double scalar
     }
 }
 
-double* AugmentedMatrix(double* Coffmatrix, double* Constmatrix, int equations, int variables) {
-    double* AugMatrix = new double[equations*(variables + 1)];
-    for (int i=0; i<equations; i++) {
-        for(int j=0; j<variables+1; j++) {
-            if(j == variables)
-                AugMatrix[i*(variables+1)+j] = Constmatrix[i];
-            else 
-                AugMatrix[i*(variables+1)+j] = Coffmatrix[i*variables + j]; 
+#if DEV_MODE
+
+    double* AugmentedMatrix(double* Coffmatrix, double* Constmatrix, int equations, int variables) {
+        double* AugMatrix = new double[equations*(variables + 1)];
+        for (int i=0; i<equations; i++) {
+            for(int j=0; j<variables+1; j++) {
+                if(j == variables)
+                    AugMatrix[i*(variables+1)+j] = Constmatrix[i];
+                else 
+                    AugMatrix[i*(variables+1)+j] = Coffmatrix[i*variables + j]; 
+            }
         }
+            
+        return AugMatrix;
     }
         
-    return AugMatrix;
-}
-    
-int rowtoLeadingPlace (double* Echelonform, int cols, int input_row) {
-    int leadingplace = 0;
-    for (int i=0; i<cols-1; i++) {
-        if (Echelonform[(input_row-1)*cols+i] != 0) {
-            leadingplace = i+1;
-            break;
+    int rowtoLeadingPlace (double* Echelonform, int cols, int input_row) {
+        int leadingplace = 0;
+        for (int i=0; i<cols-1; i++) {
+            if (Echelonform[(input_row-1)*cols+i] != 0) {
+                leadingplace = i+1;
+                break;
+            }
+        }
+        return leadingplace;
+    }
+
+    int leadingPlacetoRow (double* Echelonform, int Rank, int cols, int LeadingPlace) {
+        for(int i=0; i<Rank; i++) {
+            if(rowtoLeadingPlace(Echelonform, cols, i+1) == LeadingPlace)
+            return i+1;
         }
     }
-    return leadingplace;
-}
 
-int leadingPlacetoRow (double* Echelonform, int Rank, int cols, int LeadingPlace) {
-    for(int i=0; i<Rank; i++) {
-        if(rowtoLeadingPlace(Echelonform, cols, i+1) == LeadingPlace)
-        return i+1;
-    }
-}
-
-bool* freeVariables (double* reducedEchelonform, int Rank, int cols) {
-    bool* free_variables = new bool[cols-1];
-    for (int i=0; i<cols-1; i++) {
-        free_variables[i] = true;
-    }
-    
-    for(int i=0; i<Rank; i++) {
-        free_variables[rowtoLeadingPlace(reducedEchelonform, cols, i+1)-1] = false;
-    }
-    
-    return free_variables;
-}
-
-bool Inconsistency_check(double* reducedEchelonform, int Rank, int rows, int cols) {
-    bool check = false;
-    for(int i=Rank; i<rows; i++) {
-        if(reducedEchelonform[i*cols + cols-1] != 0) {
-            check = true;
-            break;
+    bool* freeVariables (double* reducedEchelonform, int Rank, int cols) {
+        bool* free_variables = new bool[cols-1];
+        for (int i=0; i<cols-1; i++) {
+            free_variables[i] = true;
         }
+        
+        for(int i=0; i<Rank; i++) {
+            free_variables[rowtoLeadingPlace(reducedEchelonform, cols, i+1)-1] = false;
+        }
+        
+        return free_variables;
     }
-    return check;
-}
+
+    bool Inconsistency_check(double* reducedEchelonform, int Rank, int rows, int cols) {
+        bool check = false;
+        for(int i=Rank; i<rows; i++) {
+            if(reducedEchelonform[i*cols + cols-1] != 0) {
+                check = true;
+                break;
+            }
+        }
+        return check;
+    }
+
+#endif
 
 void MatrixCleanup (double* matrix, int rows, int cols) {
     for (int i=0; i<rows; i++) {

@@ -1,3 +1,4 @@
+#include "config.h"
 #include "fraction_matrix_utilities.h"
 #include "fraction_matrix_features.h"
 #include "Matrix_utilities.h"
@@ -8,15 +9,19 @@
 #include <cmath>
 using namespace std;
 
-fraction* Double_to_Fraction_Matrix(double* matrix, int rows, int cols) {
-    fraction* temp = new fraction[rows*cols];
-    for(int i=0; i<rows; i++) {
-        for(int j=0; j<cols; j++) {
-            temp[i*cols+j] = matrix[i*cols+j];
+#if DEV_MODE 
+
+    fraction* Double_to_Fraction_Matrix(double* matrix, int rows, int cols) {
+        fraction* temp = new fraction[rows*cols];
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                temp[i*cols+j] = matrix[i*cols+j];
+            }
         }
-    }
-    return temp;
-}    
+        return temp;
+    }    
+
+#endif
 
 void Equations(fraction* Augmatrix, int rows, int cols) {
     for(int i=0; i<rows; i++) {
@@ -84,11 +89,16 @@ fraction DeterminantSimplifier (fraction* matrix, int size) {
     return factor;
 }
 
-void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar) {
-    for(int i=0; i<rows; i++) {
-        scaledRow(matrix, cols, i+1, scalar);
+#if DEV_MODE 
+
+    void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar) {
+        for(int i=0; i<rows; i++) {
+            scaledRow(matrix, cols, i+1, scalar);
+        }
     }
-}
+
+    
+#endif
 
 void scalarDivision(fraction *matrix, int rows, int cols, fraction scalar) {
     for(int i=0; i<rows; i++) {
@@ -238,28 +248,32 @@ bool Inconsistency_check(fraction* reducedEchelonform, int Rank, int rows, int c
     return check;
 }
 
-fraction* RandomMatrix (int rows, int cols) {
-    fraction* temp = new fraction[rows*cols];
-    for(int i=0; i<rows; i++) {
-        for(int j=0; j<cols; j++) {
-            temp[i*cols+j].Set(rand()%15-6, rand()%15-6);
-        }
-    }
-    return temp;
-}
+#if DEV_MODE
 
-fraction* IdentityGenerator(int size) {
-    fraction* temp = new fraction[size*size];
-    for(int i=0; i<size; i++) {
-        for(int j=0; j<size; j++) {
-            if(i==j)
-                temp[i*size + j] = 1;
-            else
-                temp[i*size + j] = 0;
+    fraction* RandomMatrix (int rows, int cols) {
+        fraction* temp = new fraction[rows*cols];
+        for(int i=0; i<rows; i++) {
+            for(int j=0; j<cols; j++) {
+                temp[i*cols+j].Set(rand()%15-6, rand()%15-6);
+            }
         }
+        return temp;
     }
-    return temp;
-}
+
+    fraction* IdentityGenerator(int size) {
+        fraction* temp = new fraction[size*size];
+        for(int i=0; i<size; i++) {
+            for(int j=0; j<size; j++) {
+                if(i==j)
+                    temp[i*size + j] = 1;
+                else
+                    temp[i*size + j] = 0;
+            }
+        }
+        return temp;
+    }
+
+#endif
 
 fraction* Copy(fraction* matrix, int rows, int cols) {
     fraction* temp = new fraction[rows*cols];

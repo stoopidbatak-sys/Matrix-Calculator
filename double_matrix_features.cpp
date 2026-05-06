@@ -1,3 +1,4 @@
+#include "config.h"
 #include "double_matrix_features.h"
 #include "double_matrix_utilities.h"
 #include "basic_utilities.h"
@@ -21,72 +22,79 @@ namespace Double {
         
         return result;
     }
+    
+    #if DEV_MODE
+        double* Addition (double *matrix1, double *matrix2, int rows, int cols) {
 
-    double* Addition (double *matrix1, double *matrix2, int rows, int cols) {
+            double *result = new double[rows*cols];
 
-        double *result = new double[rows*cols];
-
-        for (int i=0; i<rows; i++) {
-            for (int j=0; j<cols; j++) {
-                result[i*cols+j] = matrix1[i*cols+j] + matrix2[i*cols+j];
-            }
-        }
-
-        return result;
-    }
-
-    double* Subtraction (double *matrix1, double *matrix2, int rows, int cols) {
-        double *result = new double[rows*cols];
-
-        for (int i=0; i<rows; i++) {
-            for (int j=0; j<cols; j++) {
-                result[i*cols+j] = matrix1[i*cols+j] - matrix2[i*cols+j];
-            }
-        }
-
-        return result;
-    }
-
-    double* Multiplication (double *matrix1, double *matrix2, int rows1, int cols1, int rows2, int cols2) {  
-        double *result = new double[rows1*cols2];
-
-        for (int i=0; i<cols2; i++) {
-            for (int j=0; j<rows1; j++) {
-                result[j*cols2+i] = 0;
-                for (int k=0; k<cols1; k++) {
-                    result[j*cols2+i] += matrix1[j*cols1+k]*matrix2[k*cols2+i];
+            for (int i=0; i<rows; i++) {
+                for (int j=0; j<cols; j++) {
+                    result[i*cols+j] = matrix1[i*cols+j] + matrix2[i*cols+j];
                 }
             }
+
+            return result;
         }
 
-        return result;
-    }
+        double* Subtraction (double *matrix1, double *matrix2, int rows, int cols) {
+            double *result = new double[rows*cols];
 
-    double* PowerMatrix(double* matrix, int size, int power) {
-        double* result = Copy(matrix, size, size);
-
-        for (int i = 1; i < power; i++) {
-            double* temp = Multiplication(result, matrix, size, size, size, size);
-            delete[] result;
-            result = temp;
-        }
-
-        return result;
-    }
-
-    double* Inverse (double* matrix, int size) {
-        double* temp = new double[size*size];
-        for (int i=0; i<size; i++) {
-            for (int j=0; j<size; j++) {
-                double* minor = Minor(matrix, size, i+1, j+1);
-                temp[i*size+j] = cofactor(minor, size-1, i+1, j+1);
-                delete[] minor;
+            for (int i=0; i<rows; i++) {
+                for (int j=0; j<cols; j++) {
+                    result[i*cols+j] = matrix1[i*cols+j] - matrix2[i*cols+j];
+                }
             }
+
+            return result;
         }
-        double* result = Transpose(temp, size, size);
-        delete[] temp;
-        return result;
-    }
+
+    #endif
+
+        double* Multiplication (double *matrix1, double *matrix2, int rows1, int cols1, int rows2, int cols2) {  
+            double *result = new double[rows1*cols2];
+
+            for (int i=0; i<cols2; i++) {
+                for (int j=0; j<rows1; j++) {
+                    result[j*cols2+i] = 0;
+                    for (int k=0; k<cols1; k++) {
+                        result[j*cols2+i] += matrix1[j*cols1+k]*matrix2[k*cols2+i];
+                    }
+                }
+            }
+
+            return result;
+        }
+
+    #if DEV_MODE
+
+        double* PowerMatrix(double* matrix, int size, int power) {
+            double* result = Copy(matrix, size, size);
+
+            for (int i = 1; i < power; i++) {
+                double* temp = Multiplication(result, matrix, size, size, size, size);
+                delete[] result;
+                result = temp;
+            }
+
+            return result;
+        }
+
+    #endif
+
+        double* Inverse (double* matrix, int size) {
+            double* temp = new double[size*size];
+            for (int i=0; i<size; i++) {
+                for (int j=0; j<size; j++) {
+                    double* minor = Minor(matrix, size, i+1, j+1);
+                    temp[i*size+j] = cofactor(minor, size-1, i+1, j+1);
+                    delete[] minor;
+                }
+            }
+            double* result = Transpose(temp, size, size);
+            delete[] temp;
+            return result;
+        }
 
     long long Determinant (double* matrix, int size) {
         int rowswaps = 0;
@@ -144,32 +152,35 @@ namespace Double {
         return temp;
     }
 
-    double* reducedEchelon (double* matrix, int rows, int cols, int &rowswaps) {
-        double* temp = rowEchelon(matrix, rows, cols, rowswaps);
-        DisplayMatrix(temp, rows, cols);
+    #if DEV_MODE
 
-        int column_pivot_shift;
-        for(int i=rows-1; i>=0; i--) {
-            column_pivot_shift = 0;
-            while(temp[i*cols+i+column_pivot_shift]==0) {
-                column_pivot_shift++;
+        double* reducedEchelon (double* matrix, int rows, int cols, int &rowswaps) {
+            double* temp = rowEchelon(matrix, rows, cols, rowswaps);
 
+            int column_pivot_shift;
+            for(int i=rows-1; i>=0; i--) {
+                column_pivot_shift = 0;
+                while(temp[i*cols+i+column_pivot_shift]==0) {
+                    column_pivot_shift++;
+
+                    if(i+column_pivot_shift >= cols)
+                        break;  
+                }
                 if(i+column_pivot_shift >= cols)
-                    break;  
-            }
-            if(i+column_pivot_shift >= cols)
-                continue;
+                    continue;
 
-            descaledRow(temp, cols, i+1, temp[i*cols+i+column_pivot_shift]);
-            for(int j=0; j<i; j++) {
-                double scalar = -temp[(i-1-j)*cols+i+column_pivot_shift]/temp[i*cols+i+column_pivot_shift];
-                rowaddition(temp, cols, i-j, i+1, scalar);
+                descaledRow(temp, cols, i+1, temp[i*cols+i+column_pivot_shift]);
+                for(int j=0; j<i; j++) {
+                    double scalar = -temp[(i-1-j)*cols+i+column_pivot_shift]/temp[i*cols+i+column_pivot_shift];
+                    rowaddition(temp, cols, i-j, i+1, scalar);
+                }
             }
+
+            MatrixCleanup(temp, rows, cols);
+            return temp;
         }
 
-        MatrixCleanup(temp, rows, cols);
-        return temp;
-    }
+    #endif
 
     int Rank (double *matrix, int rows, int cols) {
         int rowswaps = 0;
@@ -241,45 +252,48 @@ namespace Double {
         delete[] product;
     }
 
-    void Guass_Jordan_Elimination (double *Coffmatrix, double* Constmatrix, int equations, int variables) {
-        int rank = Rank(Coffmatrix, equations, variables);
-        int rows = equations;
-        int cols = variables+1;
-        double* Augmatrix = AugmentedMatrix(Coffmatrix, Constmatrix, equations, variables);
+    #if DEV_MODE
 
-        int rowswaps = 0;
-        double* reducedEchelonform = reducedEchelon(Augmatrix, rows, cols, rowswaps);
+        void Guass_Jordan_Elimination (double *Coffmatrix, double* Constmatrix, int equations, int variables) {
+            int rank = Rank(Coffmatrix, equations, variables);
+            int rows = equations;
+            int cols = variables+1;
+            double* Augmatrix = AugmentedMatrix(Coffmatrix, Constmatrix, equations, variables);
 
-        if(Inconsistency_check(reducedEchelonform, rank, rows, cols)) {
-            cout<<"\nThe System is Inconsistent!"<<endl;
-            return;
-        }
+            int rowswaps = 0;
+            double* reducedEchelonform = reducedEchelon(Augmatrix, rows, cols, rowswaps);
 
-        bool* free_variables = freeVariables(reducedEchelonform, rank, cols);
-        for(int i=0; i<cols-1; i++) {
-            if(free_variables[i]) {
-                cout<<::variables[i]<<" = "<<"free variable"<<endl;
+            if(Inconsistency_check(reducedEchelonform, rank, rows, cols)) {
+                cout<<"\nThe System is Inconsistent!"<<endl;
+                return;
             }
-            else {
-                int row = leadingPlacetoRow(reducedEchelonform, rank, cols, i+1)-1;
-                cout<<::variables[i]<<" = "<<reducedEchelonform[row*cols+cols-1];      
-                for(int j=i+1; j<cols-1; j++) {
-                    if(free_variables[j]) {
-                        if(reducedEchelonform[row*cols + j] != 0) {
-                            if(reducedEchelonform[row*cols + j] < 0)
-                                cout<<" + "<<-reducedEchelonform[row*cols + j]<<"("<<::variables[j]<<")";
-                            else 
-                                cout<<" - "<<reducedEchelonform[row*cols + j]<<"("<<::variables[j]<<")";
+
+            bool* free_variables = freeVariables(reducedEchelonform, rank, cols);
+            for(int i=0; i<cols-1; i++) {
+                if(free_variables[i]) {
+                    cout<<::variables[i]<<" = "<<"free variable"<<endl;
+                }
+                else {
+                    int row = leadingPlacetoRow(reducedEchelonform, rank, cols, i+1)-1;
+                    cout<<::variables[i]<<" = "<<reducedEchelonform[row*cols+cols-1];      
+                    for(int j=i+1; j<cols-1; j++) {
+                        if(free_variables[j]) {
+                            if(reducedEchelonform[row*cols + j] != 0) {
+                                if(reducedEchelonform[row*cols + j] < 0)
+                                    cout<<" + "<<-reducedEchelonform[row*cols + j]<<"("<<::variables[j]<<")";
+                                else 
+                                    cout<<" - "<<reducedEchelonform[row*cols + j]<<"("<<::variables[j]<<")";
+                            }
                         }
                     }
+                    cout<<endl;
                 }
-                cout<<endl;
             }
+
+            delete[] Augmatrix;
+            delete[] reducedEchelonform;
+            delete[] free_variables;
         }
 
-        delete[] Augmatrix;
-        delete[] reducedEchelonform;
-        delete[] free_variables;
-    }
-
+    #endif
 }

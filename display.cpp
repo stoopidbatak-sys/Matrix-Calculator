@@ -1,6 +1,9 @@
+#include "config.h"
 #include "display.h"
 #include "fraction.h"
+#include "double_matrix_features.h"
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 int numLength(const long long &num) {
@@ -124,3 +127,77 @@ void DisplayAugmented (fraction* Augmatrix, int equations, int variables) {
 
     delete[] lengthArray;
 }
+
+
+#if DEV_MODE
+    void DisplayMatrix(double* matrix, int rows, int cols) {
+        cout << fixed << setprecision(2);
+
+        // Top boundary
+        cout << " --     ";
+        for (int j = 0; j < cols-1; j++) {
+            cout << setw(9) << " ";
+        }
+        cout << "    --" << endl;
+
+        // Middle rows
+        for (int i = 0; i < rows; i++) {
+            cout << "| ";
+            for (int j = 0; j < cols; j++) {
+                cout << setw(8) << matrix[i * cols + j] << " ";
+            }
+            cout << "   |" << endl;
+        }
+
+        // Bottom boundary
+        cout << " --     ";
+        for (int j = 0; j < cols-1; j++) {
+            cout << setw(9) << " ";
+        }
+        cout << "    --" << endl;
+    }   
+
+    void DisplayAugmented (double* Augmatrix, int rows, int cols) {
+        cout << fixed << setprecision(2);
+
+        // Top boundary
+        cout << " --       ";
+        for (int j = 0; j < cols-1; j++) {
+            cout << setw(9) << " ";
+        }
+        cout << "      --" << endl;
+
+        // Middle rows
+        for (int i = 0; i < rows; i++) {
+            cout << "| ";
+            for (int j = 0; j < cols-1; j++) {
+                cout << setw(8) << Augmatrix[i * cols + j] << " ";
+            }
+                cout << "   |" << setw(8) << Augmatrix[i * cols + cols - 1] << " ";
+            cout << "   |" << endl;
+        }
+
+        // Bottom boundary
+        cout << " --       ";
+        for (int j = 0; j < cols-1; j++) {
+            cout << setw(9) << " ";
+        }
+        cout << "      --" << endl;
+    }
+
+    void DisplayInverse (double* matrix, double* inverse, int size) {
+        DisplayMatrix(inverse, size, size);
+        cout << " -------";
+        for (int j = 0; j < 9*(size-1); j++) {
+            cout << "-";
+        }
+        cout << "------" << endl;
+        for (int i=0; i<size/2; i++) 
+            cout<<setw(9)<<" ";
+        if (size%2 != 0)
+            cout<<setw(4)<<" ";
+        long long det = Double :: Determinant(matrix, size);
+        cout<<"  "<<det<<endl;
+    }
+
+#endif

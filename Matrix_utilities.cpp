@@ -459,14 +459,15 @@ void SwitchBody(const Operations &op) {
             EquationSimplifier(fractionCoffmatrix, fractionConstmatrix, size, size);
             double* Coffmatrix = Fraction_to_Double_Matrix(fractionCoffmatrix, size, size);
             double* Constmatrix = Fraction_to_Double_Matrix(fractionConstmatrix, size, size);
+            
+            fraction* AugMatrix = AugmentedMatrix(fractionCoffmatrix, fractionConstmatrix, size, size);
+            cout<<"\n====Equations===="<<endl;
+            Equations(AugMatrix, size, size+1);
+            
             delete[] fractionCoffmatrix;
             fractionCoffmatrix = nullptr;
             delete[] fractionConstmatrix;
             fractionConstmatrix = nullptr;
-         
-            double* AugMatrix = AugmentedMatrix(Coffmatrix, Constmatrix, size, size);
-            cout<<"\n====Equations===="<<endl;
-            Equations(AugMatrix, size, size+1);
 
             cout<<"\n====Solution===="<<endl;
             Double :: CramersRule(Coffmatrix, Constmatrix, size);
@@ -509,14 +510,15 @@ void SwitchBody(const Operations &op) {
             EquationSimplifier(fractionCoffmatrix, fractionConstmatrix, size, size);
             double* Coffmatrix = Fraction_to_Double_Matrix(fractionCoffmatrix, size, size);
             double* Constmatrix = Fraction_to_Double_Matrix(fractionConstmatrix, size, size);
+            
+            fraction* AugMatrix = AugmentedMatrix(fractionCoffmatrix, fractionConstmatrix, size, size);
+            cout<<"\n====Equations===="<<endl;
+            Equations(AugMatrix, size, size+1);
+
             delete[] fractionCoffmatrix;
             fractionCoffmatrix = nullptr;
             delete[] fractionConstmatrix;
             fractionConstmatrix = nullptr;
-
-            double* AugMatrix = AugmentedMatrix(Coffmatrix, Constmatrix, size, size);
-            cout<<"\n====Equations===="<<endl;
-            Equations(AugMatrix, size, size+1);
 
             cout<<"\n====Solution===="<<endl;
             Double :: InverseMethod(Coffmatrix, Constmatrix, size);

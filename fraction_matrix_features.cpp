@@ -1,3 +1,4 @@
+#include "config.h"
 #include "fraction_matrix_features.h"
 #include "fraction_matrix_utilities.h"
 #include "basic_utilities.h"
@@ -197,46 +198,50 @@ namespace Fraction {
         return rank;
     }
 
-    void CramersRule(fraction*Coffmatrix, fraction*Constmatrix, int size) {
-        fraction *temp = new fraction[size*size];
-        fraction matrixdet = Determinant(Coffmatrix, size);
-        if(matrixdet == 0) {
-            cout<<"Singular Matrix!"<<endl;
-            return;
-        }
-        int a=0;
-        for(int i=0; i<size; i++) {
-            for(int i=0; i<size; i++) {
-                for(int j=0; j<size; j++) {
-                    if(j==a) 
-                        temp[i*size+j] = Constmatrix[i];
-                    else
-                        temp[i*size+j] = Coffmatrix[i*size+j];
-                }
+    #if DEV_MODE
+    
+        void CramersRule(fraction*Coffmatrix, fraction*Constmatrix, int size) {
+            fraction *temp = new fraction[size*size];
+            fraction matrixdet = Determinant(Coffmatrix, size);
+            if(matrixdet == 0) {
+                cout<<"Singular Matrix!"<<endl;
+                return;
             }
-                fraction solution = Determinant(temp, size);
-                solution /= matrixdet;
+            int a=0;
+            for(int i=0; i<size; i++) {
+                for(int i=0; i<size; i++) {
+                    for(int j=0; j<size; j++) {
+                        if(j==a) 
+                            temp[i*size+j] = Constmatrix[i];
+                        else
+                            temp[i*size+j] = Coffmatrix[i*size+j];
+                    }
+                }
+                    fraction solution = Determinant(temp, size);
+                    solution /= matrixdet;
+                    cout<<::variables[i]<<" = "<<solution<<endl;
+                    a++;
+            }
+
+            delete[] temp;
+        }
+
+        void InverseMethod (fraction*Coffmatrix, fraction*Constmatrix, int size) {
+            fraction det(Determinant(Coffmatrix, size));
+            fraction*inverse = Inverse(Coffmatrix, size);
+            fraction*product = Multiplication(inverse, Constmatrix, size, size, size, 1);
+
+            fraction solution;
+            for(int i=0; i<size; i++) {
+                solution = product[i] / det;
                 cout<<::variables[i]<<" = "<<solution<<endl;
-                a++;
+            }
+
+            delete[] inverse;
+            delete[] product;
         }
 
-        delete[] temp;
-    }
-
-    void InverseMethod (fraction*Coffmatrix, fraction*Constmatrix, int size) {
-        fraction det(Determinant(Coffmatrix, size));
-        fraction*inverse = Inverse(Coffmatrix, size);
-        fraction*product = Multiplication(inverse, Constmatrix, size, size, size, 1);
-
-        fraction solution;
-        for(int i=0; i<size; i++) {
-            solution = product[i] / det;
-            cout<<::variables[i]<<" = "<<solution<<endl;
-        }
-
-        delete[] inverse;
-        delete[] product;
-    }
+    #endif
 
     void Guass_Jordan_Elimination (fraction *Coffmatrix, fraction* Constmatrix, int equations, int variables) {
         int rank = Rank(Coffmatrix, equations, variables);
