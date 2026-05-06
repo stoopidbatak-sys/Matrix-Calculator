@@ -16,48 +16,7 @@ fraction* Double_to_Fraction_Matrix(double* matrix, int rows, int cols) {
         }
     }
     return temp;
-}
-
-void DisplayMatrix (fraction* matrix, int rows, int cols) {
-    cout<<" --";
-    for (int i=0; i<7*cols; i++) 
-        cout<<" ";
-    cout<<"--"<<endl;
-
-    for (int i=0; i<rows; i++) {
-        cout<<"|";
-        for (int j=0; j<cols; j++) {
-            cout<<" "<<setw(5)<<matrix[i*cols+j]<<" ";
-        }
-        cout<<"    |"<<endl;
-    }
-
-    cout<<" --";
-    for (int i=0; i<7*cols; i++) 
-        cout<<" ";
-    cout<<"--"<<endl;
 }    
-
-void DisplayAugmented (fraction* Augmatrix, int rows, int cols) {
-    cout<<" --";
-    for (int i=0; i<7*cols+5; i++) 
-        cout<<" ";
-    cout<<"--"<<endl;
-
-    for (int i=0; i<rows; i++) {
-        cout<<"|";
-        for (int j=0; j<cols-1; j++) {
-            cout<<" "<<setw(5)<<Augmatrix[i*cols+j]<<" ";
-        }
-        cout<<"    | "<<setw(5)<<Augmatrix[i*cols+cols-1]<<" ";
-        cout<<"    |"<<endl;
-    }
-
-    cout<<" --";
-    for (int i=0; i<7*cols+5; i++) 
-        cout<<" ";
-    cout<<"--"<<endl;
-}
 
 void Equations(fraction* Augmatrix, int rows, int cols) {
     for(int i=0; i<rows; i++) {

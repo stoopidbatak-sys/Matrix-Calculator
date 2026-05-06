@@ -5,8 +5,6 @@
 
 fraction* Double_to_Fraction_Matrix(double* matrix, int rows, int cols);
 
-void DisplayMatrix (fraction* matrix, int rows, int cols);
-
 void Equations(fraction* Augmatrix, int rows, int cols);
 void EquationSimplifier(fraction* Coffmatrix, fraction* Constmatrix, int equations, int variables);
 
@@ -30,7 +28,6 @@ void descaledCol (fraction* matrix, int rows, int cols, int col, fraction scalar
 void rowaddition (fraction* matrix, int cols, int rowout, int rowin, fraction scalar);
 
 fraction* AugmentedMatrix(fraction* Coffmatrix, fraction*Constmatrix, int equations, int variables);
-void DisplayAugmented (fraction* Augmatrix, int rows, int cols);
 
 int rowtoLeadingPlace (fraction* Echelonform, int cols, int input_row);
 int leadingPlacetoRow (fraction* Echelonform, int Rank, int cols, int leadingPlace);

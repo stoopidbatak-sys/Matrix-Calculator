@@ -4,6 +4,7 @@
 #include "double_matrix_utilities.h"
 #include "fraction_matrix_features.h"
 #include "fraction_matrix_utilities.h"
+#include "display.h"
 
 #include <iostream>
 using namespace std;
