@@ -87,6 +87,8 @@ void DisplayMatrix (fraction* matrix, int rows, int cols) {
     for (int i=0; i<sum_max_lengths+4*cols; i++) 
         cout<<" ";
     cout<<"--"<<endl;
+
+    delete[] lengthArray;
 } 
 
 void DisplayAugmented (fraction* Augmatrix, int equations, int variables) {
@@ -119,4 +121,6 @@ void DisplayAugmented (fraction* Augmatrix, int equations, int variables) {
     for (int i=0; i<sum_max_lengths+4*(variables+1); i++) 
         cout<<" ";
     cout<<"--"<<endl;
+
+    delete[] lengthArray;
 }

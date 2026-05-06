@@ -15,4 +15,6 @@ int length_array_Sum (int* array, int cols);
 
 void DisplayMatrix (fraction* matrix, int rows, int cols);
 
+void DisplayAugmented (fraction* Augmatrix, int equations, int variables);
+
 #endif
