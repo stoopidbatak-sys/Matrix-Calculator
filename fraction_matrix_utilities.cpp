@@ -55,6 +55,10 @@ void EquationSimplifier(fraction* Coffmatrix, fraction* Constmatrix, int equatio
     fraction* Augmatrix = AugmentedMatrix(Coffmatrix, Constmatrix, equations, variables);
     for(int i=0; i<equations; i++) {
         fraction* row = getRow(Augmatrix, variables+1, i+1);
+        if (row[0] < 0) {
+            scaledRow(Coffmatrix, variables, i+1, fraction(-1, 1));
+            Constmatrix[i] *= -1;
+        }
         fraction factor = rowfactor(row, variables+1);
         if(factor != 0) {
             descaledRow(Coffmatrix, variables, i+1, factor);
@@ -136,13 +140,17 @@ fraction* getRow (fraction* matrix, int cols, int row) {
 }
 
 fraction rowfactor(fraction* row, int cols) {
-    if(cols == 1)
-        return row[0];
+    if(cols == 1) {
+        if (row[0] < 0)
+            row[0] *= -1;
+        return row[0]; 
+    }
 
     fraction divisors[cols-1];
     for(int i=0; i<cols-1; i++) {
         divisors[i] = fraction(gcd(row[i].getNum(), row[i+1].getNum()));
     }
+    
     return rowfactor(divisors, cols-1);
 }
 

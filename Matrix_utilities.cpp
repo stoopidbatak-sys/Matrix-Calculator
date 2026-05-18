@@ -4,6 +4,7 @@
 #include "double_matrix_utilities.h"
 #include "fraction_matrix_features.h"
 #include "fraction_matrix_utilities.h"
+#include "basic_utilities.h"
 #include "display.h"
 
 #include <iostream>
@@ -51,29 +52,29 @@ void Features() {
 void SizeInput (int &rows, int &cols) {
     cout<<"Enter the Size of your Matrix : "<<endl;
     cout<<"Rows : ";
-    cin>>rows;
+    SafeInput(rows);
     while (rows <= 0) {
         cout<<"Enter a Positive Integer!"<<endl;
         cout<<"Rows : ";
-        cin>>rows;
+        SafeInput(rows);
     }
     cout<<"Columns : ";
-    cin>>cols;
+    SafeInput(cols);
     while (cols <= 0) {
         cout<<"Enter a Positive Integer!"<<endl;
         cout<<"Columns : ";
-        cin>>cols;
+        SafeInput(cols);
     }
 }
 
 void SizeInput (int &size) {
     cout<<"Enter the Size of your Matrix : "<<endl;
     cout<<"Rows = Cols = ";
-    cin>>size;
+    SafeInput(size);
     while (size <= 0) {
         cout<<"Enter a Positive Integer!"<<endl;
         cout<<"Rows = Cols = : ";
-        cin>>size;
+        SafeInput(size);
     }
 }
 
@@ -93,12 +94,12 @@ fraction* MatrixInput(int rows, int cols) {
 int InputChoice() {
     int choice;
     cout<<"\nEnter your choice : ";
-    cin>>choice;
+    SafeInput(choice);
 
     while(choice < 1 || choice > 14) {
         cout<<"Invalid Input!"<<endl;
         cout<<"Input a number from 1-14 : ";    
-        cin>>choice;
+        SafeInput(choice);
     }
 
     return choice;
@@ -287,7 +288,12 @@ void SwitchBody(const Operations &op) {
 
             cout<<"\nEnter the exponent you wanna raise the matrix to : ";
             int power;
-            cin>>power;
+            SafeInput(power);
+
+            while (power <= 0) {
+                cout<<"Invalid Input! Enter a positive integer : ";
+                SafeInput(power);
+            }
 
             fraction* result = Fraction :: PowerMatrix(matrixinput, size, power);
             cout<<"\nResult :"<<endl;
@@ -436,11 +442,11 @@ void SwitchBody(const Operations &op) {
             cout<<"---Enter the Information about the Linear System---"<<endl;
             int size;
             cout<<"\nNo of Equations = No of Variables : ";
-            cin>>size;
+            SafeInput(size);
             while (size <= 0) {
                 cout<<"Enter a Positive Integer!"<<endl;
                 cout<<"No of Equations = No of Variables : ";
-                cin>>size;
+                SafeInput(size);
             }
 
             fraction* fractionCoffmatrix = new fraction[size*size];
@@ -487,11 +493,11 @@ void SwitchBody(const Operations &op) {
             cout<<"---Enter the Information about the Linear System---"<<endl;
             int size;
             cout<<"\nNo of Equations = No of Variables : ";
-            cin>>size;
+            SafeInput(size);
             while (size <= 0) {
                 cout<<"\nEnter a Positive Integer!"<<endl;
                 cout<<"No of Equations = No of Variables : ";
-                cin>>size;
+                SafeInput(size);
             }
 
             fraction* fractionCoffmatrix = new fraction[size*size];
@@ -538,18 +544,18 @@ void SwitchBody(const Operations &op) {
             cout<<"---Enter the Information about the Linear System---"<<endl;
             int rows, cols;
             cout<<"No of Equations : ";
-            cin>>rows;
+            SafeInput(rows);
             while (rows <= 0) {
                 cout<<"\nEnter a Positive Integer!"<<endl;
                 cout<<"No of Equations : ";
-                cin>>rows;
+                SafeInput(rows);
             }
             cout<<"No of Variables : ";
-            cin>>cols;
+            SafeInput(cols);
             while (cols <= 0) {
                 cout<<"Enter a Positive Integer!"<<endl;
                 cout<<"No of Variables : ";
-                cin>>cols;
+                SafeInput(cols);
             }
 
             fraction* Coffmatrix = new fraction[rows*cols];

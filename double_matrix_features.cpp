@@ -227,6 +227,8 @@ namespace Double {
                 cout<<::variables[i]<<" = "<<num;
                 if (den != 1)
                     cout<<"/"<<den<<endl;
+                else 
+                    cout<<endl;
                 a++;
         }
 
@@ -235,6 +237,10 @@ namespace Double {
 
     void InverseMethod (double *Coffmatrix, double *Constmatrix, int size) {
         long long det = Determinant(Coffmatrix, size);
+        if(det == 0) {
+            cout<<"Singular Matrix!"<<endl;
+            return;
+        }
         double *inverse = Inverse(Coffmatrix, size);
         double *product = Multiplication(inverse, Constmatrix, size, size, size, 1);
 
@@ -246,6 +252,8 @@ namespace Double {
             cout<<::variables[i]<<" = "<<num;
             if (den != 1)
                 cout<<"/"<<den<<endl;
+            else 
+                cout<<endl;
         }
 
         delete[] inverse;

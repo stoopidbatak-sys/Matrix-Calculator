@@ -572,11 +572,11 @@ double toDouble (const fraction &obj) {
 }
 
 std::istream& operator >> (std::istream &in, fraction &obj) {
-    in>>obj.num;
+    SafeInput(in, obj.num);
     
     if(in.peek() == '/') {
         in.get();
-        in>>obj.den;
+        SafeInput(in, obj.den);
         
         if(obj.den == 0) {
             std::cout<<"Denominator can't be 0!"<<std::endl;

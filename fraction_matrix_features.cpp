@@ -227,7 +227,11 @@ namespace Fraction {
         }
 
         void InverseMethod (fraction*Coffmatrix, fraction*Constmatrix, int size) {
-            fraction det(Determinant(Coffmatrix, size));
+            fraction det = Determinant(Coffmatrix, size);
+            if(det == 0) {
+                cout<<"Singular Matrix!"<<endl;
+                return;
+            }
             fraction*inverse = Inverse(Coffmatrix, size);
             fraction*product = Multiplication(inverse, Constmatrix, size, size, size, 1);
 
@@ -245,9 +249,10 @@ namespace Fraction {
 
     void Guass_Jordan_Elimination (fraction *Coffmatrix, fraction* Constmatrix, int equations, int variables) {
         int rank = Rank(Coffmatrix, equations, variables);
-        int rows = equations;
-        int cols = variables+1;
+
         fraction* Augmatrix = AugmentedMatrix(Coffmatrix, Constmatrix, equations, variables);
+        int rows = equations;
+        int cols = variables+1; 
 
         int rowswaps = 0;
         fraction* reducedEchelonform = reducedEchelon(Augmatrix, rows, cols, rowswaps);
