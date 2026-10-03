@@ -1,4 +1,3 @@
-#include "config.h"
 #include <iostream>
 #include "Matrix_utilities.h"
 
