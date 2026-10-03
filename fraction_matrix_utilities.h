@@ -1,25 +1,14 @@
 #ifndef FRACTION_MATRIX_UTILITIES_H
     #define FRACTION_MATRIX_UTILITIES_H
 
-    #include "config.h"
     #include "fraction.h"
-
-    #if DEV_MODE
-
-        fraction* Double_to_Fraction_Matrix(double* matrix, int rows, int cols);
-
-    #endif
 
     void Equations(fraction* Augmatrix, int rows, int cols);
     void EquationSimplifier(fraction* Coffmatrix, fraction* Constmatrix, int equations, int variables);
 
     fraction DeterminantSimplifier (fraction* matrix, int size);
 
-    #if DEV_MODE
-
-        void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar);
-        
-    #endif
+    void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar);
 
     void scalarDivision(fraction *matrix, int rows, int cols, fraction scalar);
 
@@ -44,12 +33,8 @@
     bool* freeVariables (fraction* reducedEchelonform, int Rank, int cols);
     bool Inconsistency_check(fraction* reducedEchelonform, int Rank, int rows, int cols);
 
-    #if DEV_MODE
-
-        fraction* RandomMatrix (int rows, int cols);
-        fraction* IdentityGenerator (int size);
-        
-    #endif
+    fraction* RandomMatrix (int rows, int cols);
+    fraction* IdentityGenerator (int size);
 
     fraction* Copy(fraction* matrix, int rows, int cols);
 

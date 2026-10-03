@@ -2,10 +2,11 @@
     #define BASIC_UTILITIES_H
 
 #include <iostream>
+#include "BigInt.h"
 
-    long long gcd(long long a, long long b);
+    BigInt gcd(BigInt a, BigInt b);
 
-    void Simplifier(long long &num, long long &den);
+    void Simplifier(BigInt &num, BigInt &den);
 
     void SafeInput(int &x);
 

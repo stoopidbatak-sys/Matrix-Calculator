@@ -1,42 +1,39 @@
 #ifndef FRACTION_H
     #define FRACTION_H
 
+#include "BigInt.h"
 #include <iostream>
 
 class fraction {
-    long long num;
-    long long den;
+    BigInt num;
+    BigInt den;
     
     public : 
-        fraction (long long num = 0, long long den = 1);
+        fraction (BigInt num = BigInt(0), BigInt den = BigInt(1));
+
+        fraction (long long num, long long den = 1);
     
+        void Set(BigInt num, BigInt den);
+
         void Set(long long num, long long den);
         
+        void SetNum(BigInt num);
+
         void SetNum(long long num);
+
+        void SetDen(BigInt den);
 
         void SetDen(long long den);
         
-        long long getNum() const;
+        BigInt getNum() const;
 
-        long long getDen() const;
+        BigInt getDen() const;
         
         void Simplifier();
         
         fraction operator + (const fraction &obj) const;
         
         fraction& operator += (const fraction &obj);
-        
-        fraction operator + (const int &number) const;
-
-        fraction& operator += (const int &number);
-
-        fraction operator + (const float &number) const;
-
-        fraction& operator += (const float &number);
-
-        fraction operator + (const double &number) const;
-
-        fraction& operator += (const double &number);
 
         fraction operator + (const long long &number) const;
 
@@ -45,18 +42,6 @@ class fraction {
         fraction operator - (const fraction &obj) const;
         
         fraction& operator -= (const fraction &obj);
-        
-        fraction operator - (const int &number) const;
-        
-        fraction& operator -= (const int &number);
-
-        fraction operator - (const float &number) const;
-        
-        fraction& operator -= (const float &number);
-
-        fraction operator - (const double &number) const;
-
-        fraction& operator -= (const double &number);
 
         fraction operator - (const long long &number) const;
         
@@ -65,18 +50,6 @@ class fraction {
         fraction operator * (const fraction &obj) const;
 
         fraction& operator *= (const fraction &obj);
-        
-        fraction operator * (const int &scalar) const;
-        
-        fraction& operator *= (const int &scalar);
-
-        fraction operator * (const float &scalar) const;
-        
-        fraction& operator *= (const float &scalar);
-        
-        fraction operator * (const double &scalar) const;
-        
-        fraction& operator *= (const double &scalar);
 
         fraction operator * (const long long &scalar) const;
         
@@ -85,46 +58,18 @@ class fraction {
         fraction operator / (const fraction &obj) const;
 
         fraction& operator /= (const fraction &obj);
-        
-        fraction operator / (const int &scalar) const;
-        
-        fraction& operator /= (const int &scalar);
-        
-        fraction operator / (const float &scalar) const;
-        
-        fraction& operator /= (const float &scalar);
-        
-        fraction operator / (const double &scalar) const;
-        
-        fraction& operator /= (const double &scalar);
 
         fraction operator / (const long long &scalar) const;
         
         fraction& operator /= (const long long &scalar);
-        
-        fraction& operator = (const int &number); 
 
-        fraction& operator = (const float &number);
-        
-        fraction& operator = (const double &number);
+        fraction& operator = (const BigInt &number); 
 
         fraction& operator = (const long long &number); 
 
         bool operator == (const fraction &obj) const;
         
         bool operator != (const fraction &obj) const;
-        
-        bool operator == (const int &number) const;
-        
-        bool operator != (const int &number) const;
-
-        bool operator == (const float &number) const;
-
-        bool operator != (const float &number) const;
-        
-        bool operator == (const double &number) const;
-        
-        bool operator != (const double &number) const;
 
         bool operator == (const long long &number) const;
         
@@ -137,30 +82,6 @@ class fraction {
         bool operator < (const fraction &obj) const;
 
         bool operator <= (const fraction &obj) const;
-        
-        bool operator > (const int &number) const;
-
-        bool operator >= (const int &number) const;
-
-        bool operator < (const int &number) const;
-
-        bool operator <= (const int &number) const;
-
-        bool operator > (const float &number) const;
-
-        bool operator >= (const float &number) const;
-
-        bool operator < (const float &number) const;
-
-        bool operator <= (const float &number) const;
-        
-        bool operator > (const double &number) const;
-        
-        bool operator >= (const double &number) const;
-
-        bool operator < (const double &number) const;
-        
-        bool operator <= (const double &number) const;
 
         bool operator > (const long long &number) const;
 
@@ -171,12 +92,7 @@ class fraction {
         bool operator <= (const long long &number) const;
         
         fraction operator - () const;
-        
-        fraction toFraction(const double &value) const;
-        
-        fraction toFraction(const float &value) const;
 
-    friend double toDouble(const fraction &obj);
     friend std::istream& operator >> (std::istream &in, fraction &obj);
     friend std::ostream& operator << (std::ostream &out, const fraction &obj);
 };

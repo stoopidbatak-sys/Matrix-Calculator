@@ -1,27 +1,14 @@
-#include "config.h"
 #include "fraction_matrix_utilities.h"
 #include "fraction_matrix_features.h"
 #include "Matrix_utilities.h"
 #include "basic_utilities.h"
+#include "fraction.h"
+#include "BigInt.h"
 
 #include <iostream>
 #include <iomanip>
 #include <cmath>
 using namespace std;
-
-#if DEV_MODE 
-
-    fraction* Double_to_Fraction_Matrix(double* matrix, int rows, int cols) {
-        fraction* temp = new fraction[rows*cols];
-        for(int i=0; i<rows; i++) {
-            for(int j=0; j<cols; j++) {
-                temp[i*cols+j] = matrix[i*cols+j];
-            }
-        }
-        return temp;
-    }    
-
-#endif
 
 void Equations(fraction* Augmatrix, int rows, int cols) {
     for(int i=0; i<rows; i++) {
@@ -69,7 +56,7 @@ void EquationSimplifier(fraction* Coffmatrix, fraction* Constmatrix, int equatio
 }
 
 fraction DeterminantSimplifier (fraction* matrix, int size) {
-    fraction factor = 1;
+    fraction factor(1, 1);
     for(int i=0; i<size; i++) {
         for(int j=0; j<size; j++) {
             fraction den = matrix[i*size+j].getDen();
@@ -93,16 +80,12 @@ fraction DeterminantSimplifier (fraction* matrix, int size) {
     return factor;
 }
 
-#if DEV_MODE 
 
-    void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar) {
-        for(int i=0; i<rows; i++) {
-            scaledRow(matrix, cols, i+1, scalar);
-        }
+void scalarMultiplication(fraction *matrix, int rows, int cols, fraction scalar) {
+    for(int i=0; i<rows; i++) {
+        scaledRow(matrix, cols, i+1, scalar);
     }
-
-    
-#endif
+}
 
 void scalarDivision(fraction *matrix, int rows, int cols, fraction scalar) {
     for(int i=0; i<rows; i++) {
@@ -227,9 +210,11 @@ int rowtoLeadingPlace (fraction* Echelonform, int cols, int input_row) {
 
 int leadingPlacetoRow (fraction* Echelonform, int Rank, int cols, int LeadingPlace) {
     for(int i=0; i<Rank; i++) {
-        if(rowtoLeadingPlace(Echelonform, cols, i+1) == LeadingPlace)
-        return i+1;
+        if (rowtoLeadingPlace(Echelonform, cols, i+1) == LeadingPlace)
+            return i+1;
     }
+
+    return -1;
 }
 
 bool* freeVariables (fraction* reducedEchelonform, int Rank, int cols) {
@@ -256,32 +241,28 @@ bool Inconsistency_check(fraction* reducedEchelonform, int Rank, int rows, int c
     return check;
 }
 
-#if DEV_MODE
-
-    fraction* RandomMatrix (int rows, int cols) {
-        fraction* temp = new fraction[rows*cols];
-        for(int i=0; i<rows; i++) {
-            for(int j=0; j<cols; j++) {
-                temp[i*cols+j].Set(rand()%15-6, rand()%15-6);
-            }
+fraction* RandomMatrix (int rows, int cols) {
+    fraction* temp = new fraction[rows*cols];
+    for(int i=0; i<rows; i++) {
+        for(int j=0; j<cols; j++) {
+            temp[i*cols+j].Set(BigInt(rand()%20), 1);
         }
-        return temp;
     }
+    return temp;
+}
 
-    fraction* IdentityGenerator(int size) {
-        fraction* temp = new fraction[size*size];
-        for(int i=0; i<size; i++) {
-            for(int j=0; j<size; j++) {
-                if(i==j)
-                    temp[i*size + j] = 1;
-                else
-                    temp[i*size + j] = 0;
-            }
+fraction* IdentityGenerator(int size) {
+    fraction* temp = new fraction[size*size];
+    for(int i=0; i<size; i++) {
+        for(int j=0; j<size; j++) {
+            if(i==j)
+                temp[i*size + j] = 1;
+            else
+                temp[i*size + j] = 0;
         }
-        return temp;
     }
-
-#endif
+    return temp;
+}
 
 fraction* Copy(fraction* matrix, int rows, int cols) {
     fraction* temp = new fraction[rows*cols];

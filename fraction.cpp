@@ -1,47 +1,72 @@
 #include "basic_utilities.h"
 #include "fraction.h"
+#include "BigInt.h"
 
 #include <iostream>
 #include <cmath>
     
-fraction :: fraction(long long num, long long den) {
+fraction :: fraction(BigInt num, BigInt den) {
     this->num = num;
     this->den = den;
     
+    this->Simplifier();
+}
+
+fraction :: fraction(long long num, long long den) {
+    this->num = BigInt(num);
+    this->den = BigInt(den);
+    
+    this->Simplifier();
+}
+
+void fraction :: Set(BigInt num, BigInt den) {
+    this->num = num;
+    this->den = den;
+        
     this->Simplifier();
 }
 
 void fraction :: Set(long long num, long long den) {
-    this->num = num;
-        this->den = den;
-        
-        this->Simplifier();
-    }
+    this->num = BigInt(num);
+    this->den = BigInt(den);
     
-void fraction :: SetNum(long long num) {
+    this->Simplifier();
+}
+    
+void fraction :: SetNum(BigInt num) {
     this->num = num;
     this->Simplifier();
 }
 
-void fraction :: SetDen(long long den) {
+void fraction :: SetNum(long long num) {
+    this->num = BigInt(num);
+    this->Simplifier();
+}
+
+void fraction :: SetDen(BigInt den) {
     this->den = den;
     this->Simplifier();
 }
 
-long long fraction :: getNum() const {
+void fraction :: SetDen(long long den) {
+    this->den = BigInt(den);
+    this->Simplifier();
+}
+
+BigInt fraction :: getNum() const {
     return num;
 }
 
-long long fraction :: getDen() const {
+BigInt fraction :: getDen() const {
     return den;
 }
 
 void fraction :: Simplifier() {
-    long long divisor = gcd(num, den);
+    BigInt divisor = gcd(num, den);
     num /= divisor;
     den /= divisor;
     
-    if(den < 0) {
+    if (den < 0) {
         num *= -1;
         den *= -1;
     }
@@ -49,9 +74,9 @@ void fraction :: Simplifier() {
 
 fraction fraction :: operator + (const fraction &obj) const {
     fraction temp;
-    long long a = den;
-    long long b = obj.den;
-    long long divisor = gcd(a, b);
+    BigInt a = den;
+    BigInt b = obj.den;
+    BigInt divisor = gcd(a, b);
     ::Simplifier(a, b);
     
     temp.num = num*b + a*obj.num;
@@ -62,60 +87,17 @@ fraction fraction :: operator + (const fraction &obj) const {
 }
 
 fraction& fraction :: operator += (const fraction &obj) {
-    long long a = obj.den;
-    long long divisor = gcd(den, a);
-    ::Simplifier(den, a);
-    
-    num = num*a + den*obj.num;
-    den = den*a*divisor;
-    
-    this->Simplifier();
-    return *this;
-}
-
-fraction fraction :: operator + (const int &number) const {
-    fraction temp(number);
-    return *this + temp;
-}
-
-fraction& fraction :: operator += (const int &number) {
-    fraction temp(number);
-    *this += temp;
-    
-    return *this;
-}
-
-fraction fraction :: operator + (const float &number) const {
-    fraction temp = toFraction(number);
-    return *this + temp;
-}
-
-fraction& fraction :: operator += (const float &number) {
-    fraction temp = toFraction(number);
-    *this += temp;
-    
-    return *this;
-}
-
-fraction fraction :: operator + (const double &number) const {
-    fraction temp = toFraction(number);
-    return *this + temp;
-}
-
-fraction& fraction :: operator += (const double &number) {
-    fraction temp = toFraction(number);
-    *this += temp;
-
+    *this = *this + obj;
     return *this;
 }
 
 fraction fraction :: operator + (const long long &number) const {
-    fraction temp(number);
+    fraction temp(number, 1);
     return *this + temp;
 }
 
 fraction& fraction :: operator += (const long long &number) {
-    fraction temp(number);
+    fraction temp(number, 1);
     *this += temp;
     
     return *this;
@@ -123,9 +105,9 @@ fraction& fraction :: operator += (const long long &number) {
 
 fraction fraction :: operator - (const fraction &obj) const {
     fraction temp;
-    long long a = den;
-    long long b = obj.den;
-    long long divisor = gcd(a, b);
+    BigInt a = den;
+    BigInt b = obj.den;
+    BigInt divisor = gcd(a, b);
     ::Simplifier(a, b);
     
     temp.num = num*b - a*obj.num;
@@ -136,60 +118,17 @@ fraction fraction :: operator - (const fraction &obj) const {
 }
 
 fraction& fraction :: operator -= (const fraction &obj) {
-    long long a = obj.den;
-    long long divisor = gcd(den, a);
-    ::Simplifier(den, a);
-    
-    num = num*a - den*obj.num;
-    den = den*a*divisor;
-    
-    this->Simplifier();
-    return *this;
-}
-
-fraction fraction :: operator - (const int &number) const {
-    fraction temp(number);
-    return *this - temp;
-}
-
-fraction& fraction :: operator -= (const int &number) {
-    fraction temp(number);
-    *this -= temp;
-    
-    return *this;
-}
-
-fraction fraction :: operator - (const float &number) const {
-    fraction temp = toFraction(number);
-    return *this - temp;
-}
-
-fraction& fraction :: operator -= (const float &number) {
-    fraction temp = toFraction(number);
-    *this -= temp;
-    
-    return *this;
-}
-
-fraction fraction :: operator - (const double &number) const {
-    fraction temp = toFraction(number);
-    return *this - temp;
-}
-
-fraction& fraction :: operator -= (const double &number) {
-    fraction temp = toFraction(number);
-    *this -= temp;
-    
+    *this = *this - obj;
     return *this;
 }
 
 fraction fraction :: operator - (const long long &number) const {
-    fraction temp(number);
+    fraction temp(number, 1);
     return *this - temp;
 }
 
 fraction& fraction :: operator -= (const long long &number) {
-    fraction temp(number);
+    fraction temp(number, 1);
     *this -= temp;
     
     return *this;
@@ -197,10 +136,10 @@ fraction& fraction :: operator -= (const long long &number) {
 
 fraction fraction :: operator * (const fraction &obj) const {
     fraction temp;
-    long long a = num;
-    long long b = den;
-    long long c = obj.num;
-    long long d = obj.den;
+    BigInt a = num;
+    BigInt b = den;
+    BigInt c = obj.num;
+    BigInt d = obj.den;
     ::Simplifier(a, d);
     ::Simplifier(c, b);
     
@@ -212,57 +151,18 @@ fraction fraction :: operator * (const fraction &obj) const {
 }
 
 fraction& fraction :: operator *= (const fraction &obj) {
-    long long a = obj.num;
-    long long b = obj.den;
-    ::Simplifier(num, b);
-    ::Simplifier(a, den);
-    num *= a;
-    den *= b;
-    
-    this->Simplifier();
-    return *this;
-}
+    *this = *this * obj;
 
-fraction fraction :: operator * (const int &scalar) const {
-    fraction temp(scalar);
-    return (*this)*temp;
-}
-
-fraction& fraction :: operator *= (const int &scalar) {
-    fraction temp(scalar);
-    *this *= temp;
-    return *this;
-}
-
-fraction fraction :: operator * (const float &scalar) const {
-    fraction temp = toFraction(scalar);
-    return (*this)*temp;
-}
-
-fraction& fraction :: operator *= (const float &scalar) {
-    fraction temp = toFraction(scalar);
-    *this *= temp;
-    return *this;
-}
-
-fraction fraction :: operator * (const double &scalar) const {
-    fraction temp = toFraction(scalar);
-    return (*this)*temp;
-}
-
-fraction& fraction :: operator *= (const double &scalar) {
-    fraction temp = toFraction(scalar);
-    *this *= temp;
     return *this;
 }
 
 fraction fraction :: operator * (const long long &scalar) const {
-    fraction temp(scalar);
+    fraction temp(scalar, 1);
     return (*this)*temp;
 }
 
 fraction& fraction :: operator *= (const long long &scalar) {
-    fraction temp(scalar);
+    fraction temp(scalar, 1);
     *this *= temp;
     return *this;
 }
@@ -273,10 +173,10 @@ fraction fraction :: operator / (const fraction &obj) const {
     }
     
     fraction temp;
-    long long a = num;
-    long long b = den;
-    long long c = obj.num;
-    long long d = obj.den;
+    BigInt a = num;
+    BigInt b = den;
+    BigInt c = obj.num;
+    BigInt d = obj.den;
     ::Simplifier(a, c);
     ::Simplifier(b, d);
     
@@ -292,72 +192,8 @@ fraction& fraction :: operator /= (const fraction &obj) {
         throw std::runtime_error("Division by zero");
     }
     
-    long long a = obj.num;
-    long long b = obj.den;
-    ::Simplifier(num, a);
-    ::Simplifier(den, b);
-    
-    num *= b;
-    den *= a;
-    
-    this->Simplifier();
-    return *this;
-}
+    *this = *this/obj;
 
-fraction fraction :: operator / (const int &scalar) const {
-    if (scalar == 0) {
-        throw std::runtime_error("Division by zero");
-    }
-    
-    fraction temp(scalar);
-    return (*this)/temp;
-}
-
-fraction& fraction :: operator /= (const int &scalar) {
-    if (scalar == 0) {
-        throw std::runtime_error("Division by zero");
-    }
-
-    fraction temp(scalar);
-    *this /= temp;
-    return *this;
-}
-
-fraction fraction :: operator / (const float &scalar) const {
-    if (scalar == 0) {
-        throw std::runtime_error("Division by zero");
-    }
-
-    fraction temp = toFraction(scalar);
-    return (*this)/temp;
-}
-
-fraction& fraction :: operator /= (const float &scalar) {
-    if (scalar == 0) {
-        throw std::runtime_error("Division by zero");
-    }
-
-    fraction temp = toFraction(scalar);
-    *this /= temp;
-    return *this;
-}
-
-fraction fraction :: operator / (const double &scalar) const {
-    if (scalar == 0) {
-        throw std::runtime_error("Division by zero");
-    }
-    
-    fraction temp = toFraction(scalar);
-    return (*this)/temp;
-}
-
-fraction& fraction :: operator /= (const double &scalar) {
-    if (scalar == 0) {
-        throw std::runtime_error("Division by zero");
-    }
-
-    fraction temp = toFraction(scalar);
-    *this /= temp;
     return *this;
 }
 
@@ -366,7 +202,7 @@ fraction fraction :: operator / (const long long &scalar) const {
         throw std::runtime_error("Division by zero");
     }
     
-    fraction temp(scalar);
+    fraction temp(scalar, 1);
     return (*this)/temp;
 }
 
@@ -375,32 +211,20 @@ fraction& fraction :: operator /= (const long long &scalar) {
         throw std::runtime_error("Division by zero");
     }
 
-    fraction temp(scalar);
+    fraction temp(scalar, 1);
     *this /= temp;
     return *this;
 }
 
-fraction& fraction :: operator = (const int &number) {
+fraction& fraction :: operator = (const BigInt &number) {
     num = number;
-    den = 1;
-    return *this;
-} 
-
-fraction& fraction :: operator = (const float &number) {
-    fraction temp = toFraction(number);
-    *this = temp;
-    return *this;
-}
-
-fraction& fraction :: operator = (const double &number) {
-    fraction temp = toFraction(number);
-    *this = temp;
+    den = BigInt(1);
     return *this;
 }
 
 fraction& fraction :: operator = (const long long &number) {
-    num = number;
-    den = 1;
+    num = BigInt(number);
+    den = BigInt(1);
     return *this;
 }
 
@@ -414,35 +238,8 @@ bool fraction :: operator != (const fraction &obj) const {
     return !(*this == obj);
 }
 
-bool fraction :: operator == (const int &number) const {
-    fraction temp(number);
-    return (*this == temp);
-}
-
-bool fraction :: operator != (const int &number) const {
-    return !(*this == number);
-}
-
-bool fraction :: operator == (const float &number) const {
-    fraction temp = toFraction(number);
-    return (*this == temp);
-}
-
-bool fraction :: operator != (const float &number) const {
-    return !(*this == number);
-}
-
-bool fraction :: operator == (const double &number) const {
-    fraction temp = toFraction(number);
-    return (*this == temp);
-}
-
-bool fraction :: operator != (const double &number) const {
-    return !(*this == number);
-}
-
 bool fraction :: operator == (const long long &number) const {
-    fraction temp(number);
+    fraction temp(number, 1);
     return (*this == temp);
 }
 
@@ -466,60 +263,8 @@ bool fraction :: operator <= (const fraction &obj) const {
     return (*this < obj || *this == obj);
 }
 
-bool fraction :: operator > (const int &number) const {
-    return (num > (number*den));
-}
-
-bool fraction :: operator >= (const int &number) const {
-    return (*this > number || *this == number);
-}
-
-bool fraction :: operator < (const int &number) const {
-    return (num < (number*den));
-}
-
-bool fraction :: operator <= (const int &number) const {
-    return (*this < number || *this == number);
-}
-
-bool fraction :: operator > (const float &number) const {
-    fraction temp = toFraction(number);
-    return (*this > temp);
-}
-
-bool fraction :: operator >= (const float &number) const {
-    return (*this > number || *this == number);
-}
-
-bool fraction :: operator < (const float &number) const {
-    fraction temp = toFraction(number);
-    return (*this < temp);
-}
-
-bool fraction :: operator <= (const float &number) const {
-    return (*this < number || *this == number);
-}
-
-bool fraction :: operator > (const double &number) const {
-    fraction temp = toFraction(number);
-    return (*this > temp);
-}
-
-bool fraction :: operator >= (const double &number) const {
-    return (*this > number || *this == number);
-}
-
-bool fraction :: operator < (const double &number) const {
-    fraction temp = toFraction(number);
-    return (*this < temp);
-}
-
-bool fraction :: operator <= (const double &number) const {
-    return (*this < number || *this == number);
-}
-
 bool fraction :: operator > (const long long &number) const {
-    return (num > (number*den));
+    return (num > (den*number));
 }
 
 bool fraction :: operator >= (const long long &number) const {
@@ -527,7 +272,7 @@ bool fraction :: operator >= (const long long &number) const {
 }
 
 bool fraction :: operator < (const long long &number) const {
-    return (num < (number*den));
+    return (num < (den*number));
 }
 
 bool fraction :: operator <= (const long long &number) const {
@@ -538,45 +283,12 @@ fraction fraction :: operator - () const {
     return fraction(-num, den);
 }
 
-fraction fraction :: toFraction(const double &value) const {
-    const long long precision = 1000000000LL; // 10^9
-    
-    long long numerator = round(value * precision);
-    long long denominator = precision;
-    
-    long long g = gcd(abs(numerator), denominator);
-    
-    numerator /= g;
-    denominator /= g;
-    
-    fraction temp(numerator, denominator);
-    return temp;
-}
-
-fraction fraction :: toFraction(const float &value) const {
-    const long long precision = 10000000LL; // 10^7 (matches float precision)
-    
-    long long numerator = round(value * precision);
-    long long denominator = precision;
-    
-    long long g = gcd(llabs(numerator), denominator);
-    
-    numerator /= g;
-    denominator /= g;
-        
-    return fraction(numerator, denominator);
-}
-
-double toDouble (const fraction &obj) {
-    return static_cast<double>(obj.num) / obj.den;
-}
-
 std::istream& operator >> (std::istream &in, fraction &obj) {
-    SafeInput(in, obj.num);
+    in>>obj.num;
     
     if(in.peek() == '/') {
         in.get();
-        SafeInput(in, obj.den);
+        in>>obj.den;
         
         if(obj.den == 0) {
             std::cout<<"Denominator can't be 0!"<<std::endl;

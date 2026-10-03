@@ -1,7 +1,6 @@
 #include "fraction.h"
+#include "BigInt.h"
 #include "matrix_utilities.h"
-#include "double_matrix_features.h"
-#include "double_matrix_utilities.h"
 #include "fraction_matrix_features.h"
 #include "fraction_matrix_utilities.h"
 #include "basic_utilities.h"
@@ -22,7 +21,7 @@ void MainMenu() {
 
     cout<<"Perform any Matrix Operation you want But Before that!"<<endl;
     cout<<"A few things to Remember : "<<endl;
-    cout<<"      1) The Calculator is still in Beta Version and is accurate upto 8 x 8 matrices"<<endl;
+    cout<<"      1) The Calculator is still in Beta Version"<<endl;
     cout<<"      2) The Input Mechanism works on fractions"<<endl;
     cout<<"      3) Enter Simplified Coefficients (integers) for Linear Equations (Recommendation)"<<endl;
     cout<<"      4) The program will Display Simplified Linear Equations"<<endl;
@@ -150,6 +149,8 @@ Operations InputEnum(int choice) {
         case 14 : 
             return Operations :: Exit;
     }
+
+    return Operations :: Exit;
 }
 
 void SwitchBody(const Operations &op) {
@@ -166,7 +167,7 @@ void SwitchBody(const Operations &op) {
             cout<<"\nInput Matrix :"<<endl;
             DisplayMatrix(matrixinput, rows, cols);
 
-            fraction* result = Fraction :: Transpose(matrixinput, rows, cols);
+            fraction* result = Transpose(matrixinput, rows, cols);
             cout<<"\nResult :"<<endl;
             DisplayMatrix(result, cols, rows);
 
@@ -194,7 +195,7 @@ void SwitchBody(const Operations &op) {
             cout<<"\nInput Matrix no 2 : "<<endl;
             DisplayMatrix(matrixinput2, rows, cols);
 
-            fraction* result = Fraction :: Addition(matrixinput1, matrixinput2, rows, cols);
+            fraction* result = Addition(matrixinput1, matrixinput2, rows, cols);
             cout<<"\nResult : "<<endl;
             DisplayMatrix(result, rows, cols);
 
@@ -224,7 +225,7 @@ void SwitchBody(const Operations &op) {
             cout<<"\nInput Matrix no 2 : "<<endl;
             DisplayMatrix(matrixinput2, rows, cols);
 
-            fraction* result = Fraction :: Subtraction(matrixinput1, matrixinput2, rows, cols);
+            fraction* result = Subtraction(matrixinput1, matrixinput2, rows, cols);
             cout<<"\nResult : "<<endl;
             DisplayMatrix(result, rows, cols);
 
@@ -236,7 +237,6 @@ void SwitchBody(const Operations &op) {
             result = nullptr;
             break;
         }
-
 
         case Operations :: Multiplication : {
             cout<<"\n=====Operation Selected : Multiplication====="<<endl<<endl; 
@@ -261,7 +261,7 @@ void SwitchBody(const Operations &op) {
             cout<<"\nInput Matrix no 2 : "<<endl;
             DisplayMatrix(matrixinput2, cols1, cols2);
 
-            fraction* result = Fraction :: Multiplication(matrixinput1, matrixinput2, rows1, cols1, cols1, cols2);
+            fraction* result = Multiplication(matrixinput1, matrixinput2, rows1, cols1, cols1, cols2);
             cout<<"\nResult : "<<endl;
             DisplayMatrix(result, rows1, cols2);
 
@@ -295,7 +295,7 @@ void SwitchBody(const Operations &op) {
                 SafeInput(power);
             }
 
-            fraction* result = Fraction :: PowerMatrix(matrixinput, size, power);
+            fraction* result = PowerMatrix(matrixinput, size, power);
             cout<<"\nResult :"<<endl;
             DisplayMatrix(result, size, size);
 
@@ -316,17 +316,15 @@ void SwitchBody(const Operations &op) {
             cout<<"\n---Enter matrix Elements---"<<endl;
             fraction* matrixinput = MatrixInput(size, size);
             cout<<"\nInput Matrix :"<<endl;
+
             DisplayMatrix(matrixinput, size, size);
 
             fraction factor = DeterminantSimplifier(matrixinput, size);
-            double* Double_Input = Fraction_to_Double_Matrix(matrixinput, size, size);
 
-            fraction determinant = factor * Double :: Determinant(Double_Input, size);
+            fraction determinant = factor * Determinant(matrixinput, size);
             cout<<"\nDeterminant : "<<determinant<<endl;
 
-            delete[] Double_Input;
             delete[] matrixinput;
-            Double_Input = nullptr;
             matrixinput =  nullptr;
             break;
         }
@@ -343,16 +341,15 @@ void SwitchBody(const Operations &op) {
             cout<<"\nInput Matrix :"<<endl;
             DisplayMatrix(matrixinput, size, size);
 
-            fraction det = Fraction :: Determinant(matrixinput, size);
+            fraction det = Determinant(matrixinput, size);
 
             if(det == 0) {
                 cout<<"\nThe Matrix has no Inverse!"<<endl;
                 delete[] matrixinput;
                 matrixinput = nullptr;
-                break;
             }
             else {
-                fraction* result = Fraction :: Inverse(matrixinput, size);
+                fraction* result = Inverse(matrixinput, size);
                 cout<<"\nResult : "<<endl;
                 DisplayMatrix(result, size, size);
 
@@ -360,8 +357,8 @@ void SwitchBody(const Operations &op) {
                 delete[] result;
                 matrixinput =  nullptr;
                 result = nullptr;
-                break;
             }
+            break;
         }
 
         case Operations :: Row_Echelon_Form : {
@@ -377,7 +374,7 @@ void SwitchBody(const Operations &op) {
             DisplayMatrix(matrixinput, rows, cols);
 
             int rowswaps = 0;
-            fraction* result = Fraction :: rowEchelon(matrixinput, rows, cols, rowswaps);
+            fraction* result = rowEchelon(matrixinput, rows, cols, rowswaps);
             cout<<"\nResult : "<<endl;
             DisplayMatrix(result, rows, cols);
 
@@ -401,7 +398,7 @@ void SwitchBody(const Operations &op) {
             DisplayMatrix(matrixinput, rows, cols);
 
             int rowswaps = 0;
-            fraction* result = Fraction :: reducedEchelon(matrixinput, rows, cols, rowswaps);
+            fraction* result = reducedEchelon(matrixinput, rows, cols, rowswaps);
             cout<<"\nResult : "<<endl;
             DisplayMatrix(result, rows, cols);
 
@@ -424,15 +421,11 @@ void SwitchBody(const Operations &op) {
             cout<<"\nInput Matrix :"<<endl;
             DisplayMatrix(matrixinput, rows, cols);
 
-            double* Double_Input = Fraction_to_Double_Matrix(matrixinput, rows, cols);
-
-            int rank = Double :: Rank(Double_Input, rows, cols);
+            int rank = Rank(matrixinput, rows, cols);
             cout<<"\nRank : "<<rank<<endl;
 
-            delete[] Double_Input;
             delete[] matrixinput;
             matrixinput =  nullptr;
-            Double_Input = nullptr;
             break;
         }
 
@@ -449,34 +442,27 @@ void SwitchBody(const Operations &op) {
                 SafeInput(size);
             }
 
-            fraction* fractionCoffmatrix = new fraction[size*size];
-            fraction* fractionConstmatrix = new fraction[size];
+            fraction* Coffmatrix = new fraction[size*size];
+            fraction* Constmatrix = new fraction[size];
             cout<<"\n--Enter values for Equations--"<<endl;
             for(int i=0; i<size; i++) {
                 cout<<"\nEquation no "<<i+1<<" : "<<endl;
                 for(int j=0; j<size; j++) {
                     cout<<"Coefficient of "<<j+1<<" variable : ";
-                    cin>>fractionCoffmatrix[i*size + j];
+                    cin>>Coffmatrix[i*size + j];
                 }
                 cout<<"Constant : ";
-                cin>>fractionConstmatrix[i];
+                cin>>Constmatrix[i];
             }
 
-            EquationSimplifier(fractionCoffmatrix, fractionConstmatrix, size, size);
-            double* Coffmatrix = Fraction_to_Double_Matrix(fractionCoffmatrix, size, size);
-            double* Constmatrix = Fraction_to_Double_Matrix(fractionConstmatrix, size, size);
+            EquationSimplifier(Coffmatrix, Constmatrix, size, size);
             
-            fraction* AugMatrix = AugmentedMatrix(fractionCoffmatrix, fractionConstmatrix, size, size);
+            fraction* AugMatrix = AugmentedMatrix(Coffmatrix, Constmatrix, size, size);
             cout<<"\n====Equations===="<<endl;
             Equations(AugMatrix, size, size+1);
-            
-            delete[] fractionCoffmatrix;
-            fractionCoffmatrix = nullptr;
-            delete[] fractionConstmatrix;
-            fractionConstmatrix = nullptr;
 
             cout<<"\n====Solution===="<<endl;
-            Double :: CramersRule(Coffmatrix, Constmatrix, size);
+            CramersRule(Coffmatrix, Constmatrix, size);
 
             delete[] Coffmatrix;
             delete[] Constmatrix;
@@ -500,34 +486,27 @@ void SwitchBody(const Operations &op) {
                 SafeInput(size);
             }
 
-            fraction* fractionCoffmatrix = new fraction[size*size];
-            fraction* fractionConstmatrix = new fraction[size];
+            fraction* Coffmatrix = new fraction[size*size];
+            fraction* Constmatrix = new fraction[size];
             cout<<"\n--Enter values for Equations--"<<endl;
             for(int i=0; i<size; i++) {
                 cout<<"\nEquation no "<<i+1<<" : "<<endl;
                 for(int j=0; j<size; j++) {
                     cout<<"Coefficient of "<<j+1<<" variable : ";
-                    cin>>fractionCoffmatrix[i*size + j];
+                    cin>>Coffmatrix[i*size + j];
                 }
                 cout<<"Constant : ";
-                cin>>fractionConstmatrix[i];
+                cin>>Constmatrix[i];
             }
 
-            EquationSimplifier(fractionCoffmatrix, fractionConstmatrix, size, size);
-            double* Coffmatrix = Fraction_to_Double_Matrix(fractionCoffmatrix, size, size);
-            double* Constmatrix = Fraction_to_Double_Matrix(fractionConstmatrix, size, size);
+            EquationSimplifier(Coffmatrix, Constmatrix, size, size);
             
-            fraction* AugMatrix = AugmentedMatrix(fractionCoffmatrix, fractionConstmatrix, size, size);
+            fraction* AugMatrix = AugmentedMatrix(Coffmatrix, Constmatrix, size, size);
             cout<<"\n====Equations===="<<endl;
             Equations(AugMatrix, size, size+1);
 
-            delete[] fractionCoffmatrix;
-            fractionCoffmatrix = nullptr;
-            delete[] fractionConstmatrix;
-            fractionConstmatrix = nullptr;
-
             cout<<"\n====Solution===="<<endl;
-            Double :: InverseMethod(Coffmatrix, Constmatrix, size);
+            InverseMethod(Coffmatrix, Constmatrix, size);
 
             delete[] Coffmatrix;
             delete[] Constmatrix;
@@ -578,7 +557,7 @@ void SwitchBody(const Operations &op) {
             Equations(AugMatrix, rows, cols+1);
 
             cout<<"\n====Solution===="<<endl;
-            Fraction :: Guass_Jordan_Elimination(Coffmatrix, Constmatrix, rows, cols);
+            Guass_Jordan_Elimination(Coffmatrix, Constmatrix, rows, cols);
 
             delete[] Coffmatrix;
             delete[] Constmatrix;

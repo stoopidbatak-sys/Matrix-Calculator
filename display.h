@@ -1,10 +1,7 @@
 #ifndef DISPLAY_H
     #define DISPLAY_H
 
-    #include "config.h"
-    #include "fraction.h"
-
-    int numLength(const long long &num);   
+    #include "fraction.h"  
 
     int fractionLength(const fraction &obj);
 
@@ -17,13 +14,5 @@
     void DisplayMatrix (fraction* matrix, int rows, int cols);
 
     void DisplayAugmented (fraction* Augmatrix, int equations, int variables);
-
-    #if DEV_MODE
-        void DisplayMatrix(double* matrix, int rows, int cols);
-
-        void DisplayAugmented (double* Augmatrix, int rows, int cols);
-
-        void DisplayInverse (double* matrix, double* inverse, int size);
-    #endif
 
 #endif
